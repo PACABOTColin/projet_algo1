@@ -41,3 +41,11 @@ void lectureAnimation()
 	step++;
 	step = step % NB_INSTANTS;
 }
+
+void freeImages(DonneesImageRGB* attitude[])
+{
+	for (int i = 0; i < NB_ATTITUDES; ++i)
+	{
+		libereDonneesImageRGB(&attitude[i]);
+	}
+}

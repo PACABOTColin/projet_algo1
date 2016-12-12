@@ -55,7 +55,6 @@ void cercle(float centreX, float centreY, float rayon)
 void gestionEvenement(EvenementGfx evenement)
 {
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
-	static DonneesImageRGB *image = NULL; // L'image a afficher au centre de l'ecran
 	static DonneesImageRGB* attitude[NB_ATTITUDES]; // will contain the sprites of animation
 	static instant animation[NB_INSTANTS];
 
@@ -87,8 +86,8 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				case 'Q': /* Pour sortir quelque peu proprement du programme */
 				case 'q':
-					libereDonneesImageRGB(&image); /* On libere la structure image,
-					c'est plus propre, meme si on va sortir du programme juste apres */
+					freeImages(attitude);
+					//libereDonneesImageRGB(&image);
 					termineBoucleEvenements();
 					break;
 
@@ -139,6 +138,7 @@ void gestionEvenement(EvenementGfx evenement)
 		
 		case Redimensionnement: // La taille de la fenetre a ete modifie ou on est passe en plein ecran
 			// Donc le systeme nous en informe
+			creeAnimation(animation);
 			break;
 	}
 }
