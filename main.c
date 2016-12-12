@@ -57,14 +57,11 @@ void gestionEvenement(EvenementGfx evenement)
 	static DonneesImageRGB *image = NULL; // L'image a afficher au centre de l'ecran
 
 	/* On va aussi animer une balle traversant l'ecran */
-	static int xBalle;
-	static int yBalle;
-	static int vxBalle = 7;
-	static int vyBalle = -7;
 	
 	switch (evenement)
 	{
 		case Initialisation:
+
 			demandeTemporisation(20);
 			break;
 		
@@ -74,6 +71,7 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case Affichage:
+			effaceFenetre(255,255,255);
 			break;
 			
 		case Clavier:
