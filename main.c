@@ -53,24 +53,14 @@ void cercle(float centreX, float centreY, float rayon)
 
 void gestionEvenement(EvenementGfx evenement)
 {
-<<<<<<< HEAD
 	static bool pleinEcran = false; // To know if we are in full screen mode or not
-=======
-	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
-	static DonneesImageRGB *image = NULL; // L'image a afficher au centre de l'ecran
 
-	/* On va aussi animer une balle traversant l'ecran */
->>>>>>> fe9c4c539773ca8d1d7441784a02df1b9c193125
 	
 	switch (evenement)
 	{
 		case Initialisation:
-<<<<<<< HEAD
  
 			// Configure the system for generate a temposrisation message every 20 millisecond
-=======
-
->>>>>>> fe9c4c539773ca8d1d7441784a02df1b9c193125
 			demandeTemporisation(20);
 			break;
 		
@@ -80,14 +70,9 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case Affichage:
-<<<<<<< HEAD
 			
 			// The background color is white
 			effaceFenetre (255, 255, 255);
-			
-=======
-			effaceFenetre(255,255,255);
->>>>>>> fe9c4c539773ca8d1d7441784a02df1b9c193125
 			break;
 			
 		case Clavier:
