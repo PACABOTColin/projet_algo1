@@ -65,69 +65,15 @@ void gestionEvenement(EvenementGfx evenement)
 	switch (evenement)
 	{
 		case Initialisation:
-			xBalle = largeurFenetre()*valeurAleatoire();
-			yBalle = hauteurFenetre()*valeurAleatoire();
-			image = lisBMPRGB("ISEN.bmp");
-			/* Le message "Initialisation" est envoye une seule fois, au debut du
-			programme : il permet de fixer "image" a la valeur qu'il devra conserver
-			jusqu'a la fin du programme : soit "image" reste a NULL si l'image n'a
-			pas pu etre lue, soit "image" pointera sur une structure contenant
-			les caracteristiques de l'image "imageNB.bmp" */
-
-			// Configure le systeme pour generer un message Temporisation
-			// toutes les 20 millisecondes
 			demandeTemporisation(20);
 			break;
 		
 		case Temporisation:
-			// On met a jour les coordonnees de la balle
-			xBalle += vxBalle;
-			yBalle += vyBalle;
-
-			// On fait rebondir la balle si necessaire
-			if (xBalle < 0 || xBalle >= largeurFenetre())
-				vxBalle = -vxBalle;
-			if (yBalle < 0 || yBalle >= hauteurFenetre())
-				vyBalle = -vyBalle;
-			// Les coordonnees de la balle ayant eventuellement change,
-			// il faut redessiner la fenetre :
+			// On met a jour les coordonnees de la balle :
 			rafraichisFenetre();
 			break;
 			
 		case Affichage:
-			
-			// On part d'un fond d'ecran blanc
-			effaceFenetre (255, 255, 255);
-			
-			// Affichage d'une ligne bleue
-			couleurCourante(0, 0, 255);
-			epaisseurDeTrait(10);
-			ligne(0, 0, (largeurFenetre()-600)/2, (hauteurFenetre()-400)/2);
-
-			// Affichage d'un rectangle "saumon"
-			couleurCourante(255, 128, 128);
-			rectangle((largeurFenetre()-600)/2, (hauteurFenetre()-400)/2, (largeurFenetre()-600)/2+600, (hauteurFenetre()-400)/2+400);
-
-			// Affichage d'un texte vert sombre avec ombrage en police de taille 20
-			// L'effet d'ombrage vient tout simplement du dessin du texte en gris clair
-			// sous le texte voulu, avec un léger décalage
-			couleurCourante(210, 210, 210);
-			epaisseurDeTrait(3);
-			afficheChaine("L'algo c'est rigolo", 20, 77, 13);
-			couleurCourante(0, 128, 0);
-			epaisseurDeTrait(2);
-			afficheChaine("L'algo c'est rigolo", 20, 75, 15);
-
-			// Affichage d'une image
-			if (image != NULL) // Si l'image a pu etre lue
-			{
-				// On affiche l'image
-				ecrisImage((largeurFenetre()-image->largeurImage)/2, (hauteurFenetre()-image->hauteurImage)/2, image->largeurImage, image->hauteurImage, image->donneesRGB);
-			}
-
-			// Affichage d'une balle rouge
-			couleurCourante(255, 0, 0);
-			cercle(xBalle, yBalle, 10);
 			break;
 			
 		case Clavier:
@@ -178,18 +124,7 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 
 		case BoutonSouris:
-			if (etatBoutonSouris() == GaucheAppuye)
-			{
-				printf("Bouton gauche appuye en : (%d, %d)\n", abscisseSouris(), ordonneeSouris());
-				// Si le bouton gauche de la souris est appuye, faire repartir
-				// la balle de la souris
-				xBalle = abscisseSouris();
-				yBalle = ordonneeSouris();
-			}
-			else if (etatBoutonSouris() == GaucheRelache)
-			{
-				printf("Bouton gauche relache en : (%d, %d)\n", abscisseSouris(), ordonneeSouris());
-			}
+			
 			break;
 		
 		case Souris: // Si la souris est deplacee
@@ -200,12 +135,6 @@ void gestionEvenement(EvenementGfx evenement)
 		
 		case Redimensionnement: // La taille de la fenetre a ete modifie ou on est passe en plein ecran
 			// Donc le systeme nous en informe
-			if (xBalle >= largeurFenetre())
-				xBalle = largeurFenetre()-1;
-			if (yBalle >= hauteurFenetre())
-				yBalle = hauteurFenetre()-1;
-			printf("Largeur : %d\t", largeurFenetre());
-			printf("Hauteur : %d\n", hauteurFenetre());
 			break;
 	}
 }
