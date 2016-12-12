@@ -1,6 +1,6 @@
 #ifndef ANIMATION_H
 #define ANIMATiON_H
-#define NB_ATTITUDES 1000
+#define NB_ATTITUDES 13
 #define NB_INSTANTS 1000
 
 typedef struct instant
@@ -11,5 +11,7 @@ typedef struct instant
 
 int lectureImageAttitude (DonneesImageRGB* attitude[]);
 int creeAnimation (instant animation[]);
+void lectureAnimation();
+void afficheAnimation (DonneesImageRGB* attitude[]);
 
 #endif
