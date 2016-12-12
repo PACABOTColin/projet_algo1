@@ -1,6 +1,7 @@
 #ifndef ANIMATION_H
 #define ANIMATiON_H
-#define NB_ATTITUDES 13
+
+#define NB_ATTITUDES 14
 #define NB_INSTANTS 1000
 
 typedef struct instant
