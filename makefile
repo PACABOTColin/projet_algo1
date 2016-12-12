@@ -1,5 +1,11 @@
-animation: animation.o mainTest.o libisentlib.a
-	gcc -Wall animation.o mainTest.o -o animation libisentlib.a -lm -lglut -lGL -lX11
+animation: animation.o main.o libisentlib.a
+	gcc -Wall animation.o main.o -o animation libisentlib.a -lm -lglut -lGL -lX11
+# Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
+# et de-commenter la ligne de commande ci-apres :
+#	gcc -Wall exemple.o -o exemple libisentlib.a -lm -framework OpenGL -framework GLUT
+
+animationTest: animation.o mainTest.o libisentlib.a
+	gcc -Wall animation.o mainTest.o -o animationTest libisentlib.a -lm -lglut -lGL -lX11
 # Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
 # et de-commenter la ligne de commande ci-apres :
 #	gcc -Wall exemple.o -o exemple libisentlib.a -lm -framework OpenGL -framework GLUT
@@ -9,6 +15,9 @@ exempleTortue: exempleTortue.o libisentlib.a
 # Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
 # et de-commenter la ligne de commande ci-apres :
 #	gcc -Wall exempleTortue.o -o exempleTortue libisentlib.a -lm -framework OpenGL -framework GLU
+
+main.o: main.c animation.h
+	gcc -c -Wall main.c
 
 mainTest.o: mainTest.c animation.h
 	gcc -c -Wall mainTest.c
