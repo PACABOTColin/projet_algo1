@@ -1,3 +1,5 @@
+all : animationTest
+
 animation: animation.o main.o libisentlib.a
 	gcc -Wall animation.o main.o -o animation libisentlib.a -lm -lglut -lGL -lX11
 # Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)

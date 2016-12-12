@@ -21,23 +21,23 @@ int lectureImageAttitude(DonneesImageRGB* attitude[])
 
 int creeAnimation(instant animation[])
 {
-// 	int  step = NB_ATTITUDES / NB_INSTANTS;
-// 	for (int i = 0; i < NB_INSTANTS; ++i)
-// 	{
-// 		/* code */
-// 	}
+	for (int i = 0; i < NB_INSTANTS; ++i)
+	{
+		animation[i].nAttitude = i % NB_ATTITUDES;
+		animation[i].x = (i * largeurFenetre()) / NB_INSTANTS;
+		animation[i].y = hauteurFenetre() / 2;
+
+	}
  	return 0;
 }
 
-void afficheAnimation (DonneesImageRGB* attitude[])
+void afficheAnimation (instant animation[], DonneesImageRGB* attitude[])
 {
-	ecrisImage(x, (hauteurFenetre()-attitude[step]->hauteurImage)/2, attitude[step]->largeurImage, attitude[step]->hauteurImage, attitude[step]->donneesRGB);
+	ecrisImage(animation[step].x, animation[step].y, attitude[animation[step].nAttitude]->largeurImage, attitude[animation[step].nAttitude]->hauteurImage, attitude[animation[step].nAttitude]->donneesRGB);
 }
 
 void lectureAnimation()
 {
 	step++;
-	step = step % NB_ATTITUDES;
-	x += 5 ;
-	x = x % largeurFenetre();
+	step = step % NB_INSTANTS;
 }

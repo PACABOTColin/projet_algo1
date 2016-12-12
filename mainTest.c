@@ -57,6 +57,7 @@ void gestionEvenement(EvenementGfx evenement)
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	static DonneesImageRGB *image = NULL; // L'image a afficher au centre de l'ecran
 	static DonneesImageRGB* attitude[NB_ATTITUDES]; // will contain the sprites of animation
+	static instant animation[NB_INSTANTS];
 
 	/* On va aussi animer une balle traversant l'ecran */
 	
@@ -66,6 +67,7 @@ void gestionEvenement(EvenementGfx evenement)
 
 			demandeTemporisation(20);
 			lectureImageAttitude(attitude);
+			creeAnimation(animation);
 			break;
 		
 		case Temporisation:
@@ -75,7 +77,7 @@ void gestionEvenement(EvenementGfx evenement)
 			
 		case Affichage:
 			effaceFenetre(255,255,255);
-			afficheAnimation(attitude);
+			afficheAnimation(animation, attitude);
 			break;
 			
 		case Clavier:
