@@ -7,5 +7,7 @@ typedef struct instant
 	int X,Y;
 }instant;
 
+int lectureImageAttitude (DonneesImageRGB* attitude[]);
+int creeAnimation (instant animation[]);
 
 #endif
