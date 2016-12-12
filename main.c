@@ -53,27 +53,26 @@ void cercle(float centreX, float centreY, float rayon)
 
 void gestionEvenement(EvenementGfx evenement)
 {
-	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
-	static DonneesImageRGB *image = NULL; // L'image a afficher au centre de l'ecran
-
-	/* On va aussi animer une balle traversant l'ecran */
-	static int xBalle;
-	static int yBalle;
-	static int vxBalle = 7;
-	static int vyBalle = -7;
+	static bool pleinEcran = false; // To know if we are in full screen mode or not
 	
 	switch (evenement)
 	{
 		case Initialisation:
+ 
+			// Configure the system for generate a temposrisation message every 20 millisecond
 			demandeTemporisation(20);
 			break;
 		
 		case Temporisation:
-			// On met a jour les coordonnees de la balle :
+			// we update the window
 			rafraichisFenetre();
 			break;
 			
 		case Affichage:
+			
+			// The background color is white
+			effaceFenetre (255, 255, 255);
+			
 			break;
 			
 		case Clavier:
@@ -81,16 +80,15 @@ void gestionEvenement(EvenementGfx evenement)
 
 			switch (caractereClavier())
 			{
-				case 'Q': /* Pour sortir quelque peu proprement du programme */
+				case 'Q': /* to leave the program */
 				case 'q':
-					libereDonneesImageRGB(&image); /* On libere la structure image,
-					c'est plus propre, meme si on va sortir du programme juste apres */
+					//libereDonneesImageRGB(&image); // Todo
 					termineBoucleEvenements();
 					break;
 
 				case 'F':
 				case 'f':
-					pleinEcran = !pleinEcran; // Changement de mode plein ecran
+					pleinEcran = !pleinEcran; // Change the full screen mode
 					if (pleinEcran)
 						modePleinEcran();
 					else
@@ -99,21 +97,19 @@ void gestionEvenement(EvenementGfx evenement)
 
 				case 'R':
 				case 'r':
-					// Configure le systeme pour generer un message Temporisation
-					// toutes les 20 millisecondes (rapide)
+					// Configure the system for generate a temposrisation message every 20 millisecond (fast)
 					demandeTemporisation(20);
 					break;
 
 				case 'L':
 				case 'l':
-					// Configure le systeme pour generer un message Temporisation
-					// toutes les 100 millisecondes (lent)
+					// Configure the system for generate a temposrisation message every 20 millisecond (slow)
 					demandeTemporisation(100);
 					break;
 
 				case 'S':
 				case 's':
-					// Configure le systeme pour ne plus generer de message Temporisation
+					// Configure the system not to post a message of temposrisation
 					demandeTemporisation(-1);
 					break;
 			}
@@ -124,17 +120,25 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 
 		case BoutonSouris:
-			
+			if (etatBoutonSouris() == GaucheAppuye)
+			{
+				printf("Bouton gauche appuye en : (%d, %d)\n", abscisseSouris(), ordonneeSouris());
+			}
+			else if (etatBoutonSouris() == GaucheRelache)
+			{
+				printf("Bouton gauche relache en : (%d, %d)\n", abscisseSouris(), ordonneeSouris());
+			}
 			break;
 		
-		case Souris: // Si la souris est deplacee
+		case Souris: // If the mouse is moved
 			break;
 		
-		case Inactivite: // Quand aucun message n'est disponible
+		case Inactivite: // When a  message is not available 
 			break;
 		
-		case Redimensionnement: // La taille de la fenetre a ete modifie ou on est passe en plein ecran
-			// Donc le systeme nous en informe
+		case Redimensionnement: 
+			printf("Largeur : %d\t", largeurFenetre());
+			printf("Hauteur : %d\n", hauteurFenetre());
 			break;
 	}
 }
