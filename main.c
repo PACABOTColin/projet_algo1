@@ -5,26 +5,24 @@
 #include "BmpLib.h" // with this "#include" we can treat BMP's files
 #include "ESLib.h" // to use "valeurAleatoire()"
 
-// Largeur et hauteur par defaut d'une image correspondant a nos criteres
+// Picture default width and height
 #define LargeurFenetre 800
 #define HauteurFenetre 600
 
-// Fonction de trace de cercle
+// Circle trace function  
 void cercle(float centreX, float centreY, float rayon);
-/* La fonction de gestion des evenements, appelee automatiquement par le systeme
-des qu'une evenement survient */
-void gestionEvenement(EvenementGfx evenement);
 
+/* the "gestion des evenements" function is call automaticly by the system when an event arrive */
+void gestionEvenement(EvenementGfx evenement);
 
 
 int main(int argc, char **argv)
 {
 	initialiseGfx(argc, argv);
 	
-	prepareFenetreGraphique("GfxLib", LargeurFenetre, HauteurFenetre);
+	prepareFenetreGraphique("Animation", LargeurFenetre, HauteurFenetre);
 	
-	/* Lance la boucle qui aiguille les evenements sur la fonction gestionEvenement ci-apres,
-		qui elle-meme utilise fonctionAffichage ci-dessous */
+	/* Launch the loop wich directs events on the "gestionEvenement" function bellow, this function use "fonctionAffichage" */
 	lanceBoucleEvenements();
 	
 	return 0;
@@ -32,20 +30,20 @@ int main(int argc, char **argv)
 
 
 
-/* Fonction de trace de cercle */
+/* Circle trace function */
 void cercle(float centreX, float centreY, float rayon)
 {
-	const int Pas = 20; // Nombre de secteurs pour tracer le cercle
+	const int Pas = 20; // Number of sectors to trace the circle
 	const double PasAngulaire = 2.*M_PI/Pas;
 	int index;
 	
-	for (index = 0; index < Pas; ++index) // Pour chaque secteur
+	for (index = 0; index < Pas; ++index) // for each sectors
 	{
-		const double angle = 2.*M_PI*index/Pas; // on calcule l'angle de depart du secteur
+		const double angle = 2.*M_PI*index/Pas; // We calculate the starting angle of the sector
 		triangle(centreX, centreY,
 				 centreX+rayon*cos(angle), centreY+rayon*sin(angle),
 				 centreX+rayon*cos(angle+PasAngulaire), centreY+rayon*sin(angle+PasAngulaire));
-			// On trace le secteur a l'aide d'un triangle => approximation d'un cercle
+			// We trace the sector with the help of On trace le secteur a l'aide d'un triangle => approximation d'un cercle
 	}
 	
 }
