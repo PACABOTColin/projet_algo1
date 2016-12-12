@@ -43,14 +43,14 @@ void cercle(float centreX, float centreY, float rayon)
 		triangle(centreX, centreY,
 				 centreX+rayon*cos(angle), centreY+rayon*sin(angle),
 				 centreX+rayon*cos(angle+PasAngulaire), centreY+rayon*sin(angle+PasAngulaire));
-			// We trace the sector with the help of On trace le secteur a l'aide d'un triangle => approximation d'un cercle
+			// We trace the sector with the help of triangle
 	}
 	
 }
 
 
-/* La fonction de gestion des evenements, appelee automatiquement par le systeme
-des qu'une evenement survient */
+/* The "gestion des evenements" function is called by the system when an events appears */
+
 void gestionEvenement(EvenementGfx evenement)
 {
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
