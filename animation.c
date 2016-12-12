@@ -6,6 +6,7 @@
 #include "animation.h"
 
 int step = 0;
+int x = 0;
 
 int lectureImageAttitude(DonneesImageRGB* attitude[])
 {
@@ -30,11 +31,13 @@ int creeAnimation(instant animation[])
 
 void afficheAnimation (DonneesImageRGB* attitude[])
 {
-	ecrisImage((largeurFenetre()-attitude[step]->largeurImage)/2, (hauteurFenetre()-attitude[step]->hauteurImage)/2, attitude[step]->largeurImage, attitude[step]->hauteurImage, attitude[step]->donneesRGB);
+	ecrisImage(x, (hauteurFenetre()-attitude[step]->hauteurImage)/2, attitude[step]->largeurImage, attitude[step]->hauteurImage, attitude[step]->donneesRGB);
 }
 
 void lectureAnimation()
 {
 	step++;
 	step = step % NB_ATTITUDES;
+	x += 5 ;
+	x = x % largeurFenetre();
 }
