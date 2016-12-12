@@ -1,5 +1,5 @@
-exemple: exemple.o libisentlib.a
-	gcc -Wall exemple.o -o exemple libisentlib.a -lm -lglut -lGL -lX11
+animation: animation.o libisentlib.a
+	gcc -Wall animation.o -o animation libisentlib.a -lm -lglut -lGL -lX11
 # Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
 # et de-commenter la ligne de commande ci-apres :
 #	gcc -Wall exemple.o -o exemple libisentlib.a -lm -framework OpenGL -framework GLUT
@@ -8,10 +8,14 @@ exempleTortue: exempleTortue.o libisentlib.a
 	gcc -Wall exempleTortue.o -o exempleTortue libisentlib.a -lm -lglut -lGL -lX11
 # Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
 # et de-commenter la ligne de commande ci-apres :
-#	gcc -Wall exempleTortue.o -o exempleTortue libisentlib.a -lm -framework OpenGL -framework GLUT
+#	gcc -Wall exempleTortue.o -o exempleTortue libisentlib.a -lm -framework OpenGL -framework GLU
 
-exemple.o: exemple.c GfxLib.h BmpLib.h ESLib.h
-	gcc -Wall -c exemple.c
+animation.o: animation.c animation.h
+	gcc -c -Wall animation.c
+
+
+
+
 
 exempleTortue.o: exempleTortue.c GfxLib.h BmpLib.h ESLib.h TortueLib.h
 	gcc -Wall -c exempleTortue.c
@@ -64,5 +68,6 @@ clean:
 	rm -f *~ *.o
 
 deepclean: clean
-	rm -f exemple exempleTortue libisentlib.a
+	rm -f animation exempleTortue libisentlib.a
+
 
