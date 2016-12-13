@@ -19,7 +19,7 @@ int lectureImageAttitude(DonneesImageRGB* attitude[])
 	return 0;
 }
 
-int creeAnimation(instant animation[])
+int creeAnimation(nuage points, instant animation[])
 {
 	for (int i = 0; i < NB_INSTANTS; ++i)
 	{

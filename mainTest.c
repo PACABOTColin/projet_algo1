@@ -87,7 +87,6 @@ void gestionEvenement(EvenementGfx evenement)
 				case 'Q': /* Pour sortir quelque peu proprement du programme */
 				case 'q':
 					freeImages(attitude);
-					//libereDonneesImageRGB(&image);
 					termineBoucleEvenements();
 					break;
 
