@@ -5,6 +5,8 @@
 #include "BmpLib.h" // with this "#include" we can treat BMP's files
 #include "ESLib.h" // to use "valeurAleatoire()"
 #include "animation.h" // to use the animation functon
+#include "bouton.h" // to use the button functon
+#include "polynome.h" // to use the polynomial functon
 
 // Picture default width and height
 #define LargeurFenetre 800
@@ -57,14 +59,15 @@ void gestionEvenement(EvenementGfx evenement)
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	static DonneesImageRGB* attitude[NB_ATTITUDES]; // will contain the sprites of animation
 	static instant animation[NB_INSTANTS];
+	static bouton button[NB_BOUTON];
 
 	/* On va aussi animer une balle traversant l'ecran */
 	
 	switch (evenement)
 	{
 		case Initialisation:
-
 			demandeTemporisation(20);
+			initialiseBoutons(button);
 			lectureImageAttitude(attitude);
 			creeAnimation(animation);
 			break;
@@ -77,6 +80,7 @@ void gestionEvenement(EvenementGfx evenement)
 		case Affichage:
 			effaceFenetre(255,255,255);
 			afficheAnimation(animation, attitude);
+			afficheBouton(button);
 			break;
 			
 		case Clavier:
@@ -86,7 +90,6 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				case 'Q': /* Pour sortir quelque peu proprement du programme */
 				case 'q':
-					freeImages(attitude);
 					termineBoucleEvenements();
 					break;
 
@@ -137,6 +140,7 @@ void gestionEvenement(EvenementGfx evenement)
 		
 		case Redimensionnement: // La taille de la fenetre a ete modifie ou on est passe en plein ecran
 			// Donc le systeme nous en informe
+			redimensionne(button);
 			creeAnimation(animation);
 			break;
 	}

@@ -1,4 +1,4 @@
-all : animationTest
+all : animation
 
 animation: animation.o polygraph.o polynome.o bouton.o affichage.o main.o libisentlib.a
 	gcc -Wall animation.o polygraph.o polynome.o bouton.o affichage.o main.o -o animation libisentlib.a -lm -lglut -lGL -lX11
@@ -19,21 +19,21 @@ exempleTortue: exempleTortue.o libisentlib.a
 #	gcc -Wall exempleTortue.o -o exempleTortue libisentlib.a -lm -framework OpenGL -framework GLU
 
 polygraph.o: polygraph.c polygraph.h polynome.h
-	gcc -c Wall polygraph.c
+	gcc -c -Wall polygraph.c
 
 polynome.o: polynome.c polynome.h
-	gcc -c Wall polynme.c
+	gcc -c -Wall polynome.c
 
 bouton.o: bouton.c bouton.h affichage.h
 	gcc -c -Wall bouton.c
 
-affichage.o: affichage.c affichage.h
+affichage.o: affichage.c affichage.h bouton.h
 	gcc -c -Wall affichage.c
 
 main.o: main.c animation.h
 	gcc -c -Wall main.c
 
-mainTest.o: mainTest.c animation.h
+mainTest.o: mainTest.c animation.h bouton.h polynome.h
 	gcc -c -Wall mainTest.c
 
 animation.o: animation.c animation.h

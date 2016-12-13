@@ -1,7 +1,8 @@
 #ifndef AFFICHAGE_H
 #define AFFICHAGE_H
 
-typedef struct couleur
+// This structure create color
+typedef struct couleur 
 {
 	int r;
 	int v;
@@ -9,7 +10,8 @@ typedef struct couleur
 }couleur;
 
 
-void affichage(void);
+
+void affichage(void); //This function will display all the element of the animation player
 
 
 #endif

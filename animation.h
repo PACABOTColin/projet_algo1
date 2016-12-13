@@ -26,19 +26,20 @@ typedef struct instant
 /*this structure conain all the information for one animation*/
 typedef struct animation
 {
-	instant anim[NB_INSTANTS]; 		// contain the parametre of animation
+	instant param[NB_INSTANTS]; 		// contain the parametre of animation
 	int current_state;				// contain the avancement of the animation
 }animation;
 
 /* lectureImageAttitude read the sprite and stor it in attitude */
-int lectureImageAttitude(DonneesImageRGB* attitude[]);
+int lectureImageAttitude(DonneesImageRGB* attitude[], char nameFormat[]);
 /* creeAnimation make the animation output in array animation */
-int creeAnimation(nuage points, animation anim[], int mode);
 /* lectureAnimation forward the animation */
-void lectureAnimation(animation anim);
+animation creeAnimation(nuage points, DonneesImageRGB* attitude[], int mode);
 /* afficheAnimation display the animation on the screen */
-void afficheAnimation(animation anim[]);
+void afficheAnimation(animation anim);
 /* freeImages free memory used by the image */
-void freeImages(DonneesImageRGB* attitude[]);
+void freeImages(animation anim);
+/* this function made animation forwarde*/
+animation lectureAnimation(animation anim);
 
 #endif

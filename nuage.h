@@ -14,7 +14,7 @@
 #define DIM 100 // define the number max of dote in cloud
 
 /* this structure contain the coordinate of the dotes and the how many dote are used*/
-typedef struct nuag 
+typedef struct nuage
 {
 	int nb; 				//contain how many dote ar used
 	float x[DIM], y[DIM]; 	//contain the coordinate of the dote

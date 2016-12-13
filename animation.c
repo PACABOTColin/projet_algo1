@@ -5,47 +5,61 @@
 
 #include "animation.h"
 
-int step = 0;
-int x = 0;
+#define X_MAX_ANIMATION 620
 
-int lectureImageAttitude(DonneesImageRGB* attitude[])
+int lectureImageAttitude(DonneesImageRGB* attitude[], char nameFormat[])
 {
 	char str[50]; // this varaiable will contain the name of the file who will be load
-	for (int i = 0; i < NB_ATTITUDES; ++i)
+	int i = 0;
+	do
 	{
-		sprintf(str, "sprites/oiseauRouge%d.bmp",i+1);
+		sprintf(str, nameFormat,i+1);
 		attitude[i] = lisBMPRGB(str);
-	}
+		i++;
+	}while(attitude[i-1] != NULL);
 	return 0;
 }
 
-int creeAnimation(nuage points, instant animation[])
+animation creeAnimation(nuage points, DonneesImageRGB* attitude[], int mode)
 {
-	for (int i = 0; i < NB_INSTANTS; ++i)
+	animation anim;
+	int u = 0;
+	for(int i = 0; i < NB_INSTANTS; ++i)
 	{
-		animation[i].nAttitude = i % NB_ATTITUDES;
-		animation[i].x = (i * largeurFenetre()) / NB_INSTANTS;
-		animation[i].y = hauteurFenetre() / 2;
-
+		anim.param[i].nAttitude = i % NB_ATTITUDES;
+		anim.param[i].x = (i * X_MAX_ANIMATION) / NB_INSTANTS;
+		anim.param[i].y = hauteurFenetre() / 2;
+		if(attitude[u] == NULL)
+		{
+			u = 0;
+		}
+		anim.param[i].attitude = attitude[u];
+		u++;
 	}
- 	return 0;
+	anim.current_state = 0;
+ 	return anim ;
 }
 
-void afficheAnimation (instant animation[], DonneesImageRGB* attitude[])
+void afficheAnimation(animation anim)
 {
-	ecrisImage(animation[step].x, animation[step].y, attitude[animation[step].nAttitude]->largeurImage, attitude[animation[step].nAttitude]->hauteurImage, attitude[animation[step].nAttitude]->donneesRGB);
+	ecrisImage(anim.param[anim.current_state].x, anim.param[anim.current_state].y,
+				anim.param[anim.current_state].attitude->largeurImage,
+				anim.param[anim.current_state].attitude->hauteurImage,
+				anim.param[anim.current_state].attitude->donneesRGB);
 }
 
-void lectureAnimation()
+animation lectureAnimation(animation anim)
 {
-	step++;
-	step = step % NB_INSTANTS;
+	anim.current_state++;
+	anim.current_state = anim.current_state % NB_INSTANTS;
+	printf("pas : %d\n", anim.current_state);
+	return anim;
 }
 
-void freeImages(DonneesImageRGB* attitude[])
+void freeImages(animation anim)
 {
 	for (int i = 0; i < NB_ATTITUDES; ++i)
 	{
-		libereDonneesImageRGB(&attitude[i]);
+		libereDonneesImageRGB(&anim.param[i].attitude);
 	}
 }

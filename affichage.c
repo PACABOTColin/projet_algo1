@@ -5,7 +5,14 @@
 #include "affichage.h"
 #include "bouton.h"
 
-void affichage(bouton button[NB_BOUTON])
+
+
+color fabriqueCouleur(int r,int v,int b)
 {
-	afficheBouton(button);
+	color col;
+	col.r=r;
+	col.v=v;
+	col.b=b;
+	
+	return col;
 }

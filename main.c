@@ -4,6 +4,10 @@
 #include "GfxLib.h" // Only this "#include" is needed to use graphic
 #include "BmpLib.h" // with this "#include" we can treat BMP's files
 #include "ESLib.h" // to use "valeurAleatoire()"
+#include "animation.h" // to use the animation functon
+#include "bouton.h" // to use the button functon
+#include "polynome.h" // to use the polynomial functon
+#include "nuage.h"
 
 // Picture default width and height
 #define LargeurFenetre 800
@@ -53,8 +57,11 @@ void cercle(float centreX, float centreY, float rayon)
 
 void gestionEvenement(EvenementGfx evenement)
 {
-	static bool pleinEcran = false; // To know if we are in full screen mode or not
-
+	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
+	static DonneesImageRGB* background;
+	static bouton button[NB_BOUTON];
+	static slideBar slideButton[2];
+	static animation anim;
 	
 	switch (evenement)
 	{
@@ -62,10 +69,21 @@ void gestionEvenement(EvenementGfx evenement)
  
 			// Configure the system for generate a temposrisation message every 20 millisecond
 			demandeTemporisation(20);
+			initialiseBoutons(button);
+			redimensionne(button);
+			background = lisBMPRGB("sprites/IHM.bmp");
+			DonneesImageRGB* attitude[20];
+			lectureImageAttitude(attitude, "sprites/oiseauRouge%d.bmp");
+			anim = creeAnimation((nuage){0,{0},{0}}, attitude, 0);
+			slideButton[0] = slideBarInit(2 * largeurFenetre() / 30, 23 * largeurFenetre() / 30, 5 * hauteurFenetre() / 35, 0, NB_INSTANTS);
+			slideButton[1] = slideBarInit(26 * largeurFenetre() / 30, 29 * largeurFenetre() / 30, 10 * hauteurFenetre() / 35, 0, NB_INSTANTS);
 			break;
 		
 		case Temporisation:
 			// we update the window
+			anim.current_state = slideButton[0].value;
+			anim = lectureAnimation(anim);
+			slideButton[0].value = anim.current_state;
 			rafraichisFenetre();
 			break;
 			
@@ -73,6 +91,14 @@ void gestionEvenement(EvenementGfx evenement)
 			
 			// The background color is white
 			effaceFenetre (255, 255, 255);
+			ecrisImage(0, 0,
+						background->largeurImage,
+						background->hauteurImage,
+						background->donneesRGB);
+			afficheBouton(button);
+			afficheAnimation(anim);
+			printSlideBar(slideButton[0]);
+			printSlideBar(slideButton[1]);
 			break;
 			
 		case Clavier:
@@ -82,7 +108,8 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				case 'Q': /* to leave the program */
 				case 'q':
-					//libereDonneesImageRGB(&image); // Todo
+					libereDonneesImageRGB(&background); 
+					freeImages(anim.attitude);
 					termineBoucleEvenements();
 					break;
 
@@ -120,14 +147,9 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 
 		case BoutonSouris:
-			if (etatBoutonSouris() == GaucheAppuye)
-			{
-				printf("Bouton gauche appuye en : (%d, %d)\n", abscisseSouris(), ordonneeSouris());
-			}
-			else if (etatBoutonSouris() == GaucheRelache)
-			{
-				printf("Bouton gauche relache en : (%d, %d)\n", abscisseSouris(), ordonneeSouris());
-			}
+			bouton_clic(button);
+			slideButton[0] = gereClicSlideBar(slideButton[0]);
+			slideButton[1] = gereClicSlideBar(slideButton[1]);
 			break;
 		
 		case Souris: // If the mouse is moved
@@ -137,8 +159,7 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 		
 		case Redimensionnement: 
-			printf("Largeur : %d\t", largeurFenetre());
-			printf("Hauteur : %d\n", hauteurFenetre());
+			redimensionneFenetre(LargeurFenetre, HauteurFenetre);
 			break;
 	}
 }
