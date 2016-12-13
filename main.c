@@ -109,7 +109,7 @@ void gestionEvenement(EvenementGfx evenement)
 				case 'Q': /* to leave the program */
 				case 'q':
 					libereDonneesImageRGB(&background); 
-					freeImages(anim.attitude);
+					freeImages(anim);
 					termineBoucleEvenements();
 					break;
 
