@@ -1,5 +1,5 @@
 #ifndef ANIMATION_H
-#define ANIMATiON_H
+#define ANIMATiON_H //this is for make shure don't make multiple inclusion on this file
 
 #define NB_ATTITUDES 14
 #define NB_INSTANTS 100000
