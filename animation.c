@@ -4,6 +4,7 @@
 #include "BmpLib.h" // with this "#include" we can treat BMP's files
 
 #include "animation.h"
+#include "polynome.h"
 
 #define X_MAX_ANIMATION 620
 
@@ -24,11 +25,28 @@ animation creeAnimation(nuage points, DonneesImageRGB* attitude[], int mode)
 {
 	animation anim;
 	int u = 0;
+	if (points.nb < 2)
+	{
+		mode = 0;
+	}
+	switch(mode)
+	{
+		case 1 :
+			printf("creeAnimationLigneBrisee\n");
+			anim = creeAnimationLigneBrisee(points);
+			break;
+		default : 
+			printf("default\n");
+			for(int i = 0; i < NB_INSTANTS; ++i)
+			{
+				anim.param[i].nAttitude = i % NB_ATTITUDES;
+				anim.param[i].x = (i * X_MAX_ANIMATION) / NB_INSTANTS;
+				anim.param[i].y = hauteurFenetre() / 2;
+			}
+	}
 	for(int i = 0; i < NB_INSTANTS; ++i)
 	{
-		anim.param[i].nAttitude = i % NB_ATTITUDES;
-		anim.param[i].x = (i * X_MAX_ANIMATION) / NB_INSTANTS;
-		anim.param[i].y = hauteurFenetre() / 2;
+		printf("%d, %d\n", anim.param[i].x, anim.param[i].y);
 		if(attitude[u] == NULL)
 		{
 			u = 0;
@@ -46,13 +64,14 @@ void afficheAnimation(animation anim)
 				anim.param[anim.current_state].attitude->largeurImage,
 				anim.param[anim.current_state].attitude->hauteurImage,
 				anim.param[anim.current_state].attitude->donneesRGB);
+	//printf("%d, %d\n", anim.param[anim.current_state].x, anim.param[anim.current_state].y);
 }
 
 animation lectureAnimation(animation anim)
 {
 	anim.current_state++;
 	anim.current_state = anim.current_state % NB_INSTANTS;
-	printf("pas : %d\n", anim.current_state);
+	//printf("pas : %d\n", anim.current_state);
 	return anim;
 }
 

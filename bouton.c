@@ -12,44 +12,46 @@ bouton initialiseB(char image1[], char image2[], int etatEnfonce)
 	button.image1=lisBMPRGB(image1);
 	if(button.image1 == NULL)
 	{
-		printf("le fichier ne peut être charger\n");
+		printf("le fichier ne peut être charger : %s\n", image1);
 	}
 	button.image2=lisBMPRGB(image2);
-	if(button.image1 == NULL)
+	if(button.image2 == NULL)
 	{
-		printf("le fichier ne peut être charger\n");
+		printf("le fichier ne peut être charger: %s\n", image2);
 	}
 	button.etat = 0;
 	button.etatEnfonce = etatEnfonce;
-
+	printf("etat button : %d\n", etatEnfonce);
 	return button;
 }
 
 void initialiseBoutons(bouton button[])
 {
-	button[0] = initialiseB("sprites/playButton.bmp","sprites/pauseBouton.bmp", 1);
-	button[1] = initialiseB("sprites/stopBouton.bmp","sprites/stopBouton.bmp", 0);
-	button[2] = initialiseB("sprites/resetButton.bmp","sprites/resetButton.bmp", 0);
-	button[3] = initialiseB("sprites/LoopButton.bmp","sprites/LoopButton.bmp", 1);
-	button[4] = initialiseB("sprites/repeatBouton.bmp","sprites/repeatBouton.bmp", 0);
-	button[5] = initialiseB("sprites/editBouton.bmp","sprites/editBouton.bmp", 1);
-	button[6] = initialiseB("sprites/oiseauRouge1.bmp","sprites/oiseauRouge8.bmp", 0);
-	button[7] = initialiseB("sprites/oiseauRouge1.bmp","sprites/oiseauRouge8.bmp", 0);
-	button[8] = initialiseB("sprites/oiseauRouge1.bmp","sprites/oiseauRouge8.bmp", 0);
-	button[9] = initialiseB("sprites/oiseauRouge1.bmp","sprites/oiseauRouge8.bmp", 0);
-	button[10] = initialiseB("sprites/oiseauRouge1.bmp","sprites/oiseauRouge8.bmp", 0);
-	button[11] = initialiseB("sprites/oiseauRouge1.bmp","sprites/oiseauRouge8.bmp", 0);
-	button[12] = initialiseB("sprites/oiseauRouge1.bmp","sprites/oiseauRouge8.bmp", 0);
-	button[13] = initialiseB("sprites/oiseauRouge1.bmp","sprites/oiseauRouge8.bmp", 0);
-	button[14] = initialiseB("sprites/oiseauRouge1.bmp","sprites/oiseauRouge8.bmp", 0);
+	button[0] = initialiseB("images/Boutons/playButton.bmp","images/Boutons/pauseButton.bmp", 1);
+	button[1] = initialiseB("images/Boutons/stopButton.bmp","images/Boutons/stopButton.bmp", 0);
+	button[2] = initialiseB("images/Boutons/resetButton.bmp","images/Boutons/resetButton.bmp", 0);
+	button[3] = initialiseB("images/Boutons/LoopButton.bmp","images/Boutons/LoopButton.bmp", 1);
+	button[4] = initialiseB("images/Boutons/repeatButton.bmp","images/Boutons/repeatButton.bmp", 0);
+	button[5] = initialiseB("images/Boutons/editButton.bmp","images/Boutons/editButton.bmp", 1);
+	
+	button[6] = initialiseB("images/Boutons/Debut_Saisie.bmp","images/Boutons/Fin_Saisie.bmp", 1);
+	
+	button[7] = initialiseB("images/Boutons/affiche_Courbe.bmp","images/Boutons/affiche_Courbe_Appuis.bmp", 0);
+	button[8] = initialiseB("images/Boutons/Lagrange.bmp","images/Boutons/Lagrange_Appuis.bmp", 0);
+	button[9] = initialiseB("images/Boutons/Newton.bmp","images/Boutons/Newton_Appuis.bmp", 0);
+	button[10] = initialiseB("images/Boutons/Ligne_Brisee.bmp","images/Boutons/Ligne_Brisee_Appuis.bmp", 0);
+	button[11] = initialiseB("images/sprites/oiseauRouge3.bmp","images/sprites/oiseauRouge8.bmp", 1);
+	button[12] = initialiseB("images/sprites/oiseauRouge3.bmp","images/sprites/oiseauRouge8.bmp", 1);
+	button[13] = initialiseB("images/sprites/oiseauRouge3.bmp","images/sprites/oiseauRouge8.bmp", 1);
+	button[14] = initialiseB("images/Boutons/off_Button.bmp","images/Boutons/off_Appuis.bmp", 1);
 }
 
 bouton coordonnee (bouton button,int xmin,int ymin,int xmax,int ymax)
 {
-	button.xmin=xmin;
-	button.ymin=ymin;
-	button.xmax=xmax;
-	button.ymax=ymax;
+	button.xmin= xmin < xmax ? xmin : xmax;
+	button.ymin= ymin < ymax ? ymin : ymax;
+	button.xmax= xmin > xmax ? xmin : xmax;
+	button.ymax= ymin > ymax ? ymin : ymax;;
 
 	return button;
 }
@@ -57,23 +59,24 @@ void redimensionne (bouton button[])
 {
 	//Initialize controls button
 	
-	button[0]=coordonnee(button[0],largeurFenetre()/30,hauteurFenetre()/35,4 * largeurFenetre()/30,3 * hauteurFenetre()/35);
-	button[1]=coordonnee(button[1],5 * largeurFenetre()/30,hauteurFenetre()/35,8 * largeurFenetre()/30,3 * hauteurFenetre()/35);
-	button[2]=coordonnee(button[2],9 * largeurFenetre()/30,hauteurFenetre()/35,12 * largeurFenetre()/30,3 * hauteurFenetre()/35);
+	button[0]=coordonnee(button[0],     largeurFenetre()/30,hauteurFenetre()/35,4 * largeurFenetre()/30,3 * hauteurFenetre()/35);
+	button[1]=coordonnee(button[1],5  * largeurFenetre()/30,hauteurFenetre()/35,8 * largeurFenetre()/30,3 * hauteurFenetre()/35);
+	button[2]=coordonnee(button[2],9  * largeurFenetre()/30,hauteurFenetre()/35,12 * largeurFenetre()/30,3 * hauteurFenetre()/35);
 	button[3]=coordonnee(button[3],13 * largeurFenetre()/30,hauteurFenetre()/35,16 * largeurFenetre()/30,3 * hauteurFenetre()/35);
 	button[4]=coordonnee(button[4],17 * largeurFenetre()/30,hauteurFenetre()/35,20 * largeurFenetre()/30,3 * hauteurFenetre()/35);
 	button[5]=coordonnee(button[5],21 * largeurFenetre()/30,hauteurFenetre()/35,25 * largeurFenetre()/30,3 * hauteurFenetre()/35);
 
 	//Initialize parameters button
 	
-	button[6]=	coordonnee(button[6],26 * 	largeurFenetre()/30,		hauteurFenetre()/35,29 * largeurFenetre()/30,4 * 	hauteurFenetre()/35);
-	button[7]=	coordonnee(button[8],26 * 	largeurFenetre()/30,5 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,8 * 	hauteurFenetre()/35);
-	button[8]=	coordonnee(button[9],26 *	largeurFenetre()/30,11 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,13 * 	hauteurFenetre()/35);
-	button[9]=	coordonnee(button[10],26 * 	largeurFenetre()/30,14 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,16 * 	hauteurFenetre()/35);
-	button[10]=	coordonnee(button[11],26 *	largeurFenetre()/30,17 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,19 * 	hauteurFenetre()/35);
-	button[11]=	coordonnee(button[12],26 *	largeurFenetre()/30,20 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,22 * 	hauteurFenetre()/35);
-	button[12]=	coordonnee(button[13],26 *	largeurFenetre()/30,23 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,26 * 	hauteurFenetre()/35);
-	button[13]=	coordonnee(button[14],26 *	largeurFenetre()/30,27 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,30 * 	hauteurFenetre()/35);
+	button[6]=	coordonnee(button[6], 26 * 	largeurFenetre()/30,		hauteurFenetre()/35,29 * largeurFenetre()/30,3  * 	hauteurFenetre()/35);
+	button[7]=	coordonnee(button[7],26 * 	largeurFenetre()/30,6  * 	hauteurFenetre()/35,29 * largeurFenetre()/30,8 * 	hauteurFenetre()/35);
+	button[8]=	coordonnee(button[8],26 *	largeurFenetre()/30,9 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,11 * 	hauteurFenetre()/35);
+	button[9]=	coordonnee(button[9],26 *	largeurFenetre()/30,12 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,14 * 	hauteurFenetre()/35);
+
+	button[10]=	coordonnee(button[10],26 * largeurFenetre()/30,15 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,17  * 	hauteurFenetre()/35);
+	button[11]=	coordonnee(button[11],26.5 *	largeurFenetre()/30,18 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,21 * 	hauteurFenetre()/35);
+	button[12]=	coordonnee(button[12],26.5 *	largeurFenetre()/30,22 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,25 * 	hauteurFenetre()/35);
+	button[13]=	coordonnee(button[13],26.5 *largeurFenetre()/30,26 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,29 * 	hauteurFenetre()/35);
 	button[14]=	coordonnee(button[14],26 *	largeurFenetre()/30,31 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,34 * 	hauteurFenetre()/35);
 	
 }

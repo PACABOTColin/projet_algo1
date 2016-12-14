@@ -1,7 +1,7 @@
 all : animation
 
-animation: animation.o polygraph.o polynome.o bouton.o affichage.o main.o libisentlib.a
-	gcc -Wall animation.o polygraph.o polynome.o bouton.o affichage.o main.o -o animation libisentlib.a -lm -lglut -lGL -lX11
+animation: animation.o polygraph.o polynome.o bouton.o affichage.o main.o nuage.o libisentlib.a
+	gcc -Wall animation.o polygraph.o polynome.o bouton.o affichage.o nuage.o main.o -o animation libisentlib.a -lm -lglut -lGL -lX11
 # Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
 # et de-commenter la ligne de commande ci-apres :
 #	gcc -Wall exemple.o -o exemple libisentlib.a -lm -framework OpenGL -framework GLUT
@@ -17,6 +17,9 @@ exempleTortue: exempleTortue.o libisentlib.a
 # Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
 # et de-commenter la ligne de commande ci-apres :
 #	gcc -Wall exempleTortue.o -o exempleTortue libisentlib.a -lm -framework OpenGL -framework GLU
+
+nuage.o: nuage.c nuage.h GfxLib.h
+	gcc -c -Wall nuage.c
 
 polygraph.o: polygraph.c polygraph.h polynome.h
 	gcc -c -Wall polygraph.c

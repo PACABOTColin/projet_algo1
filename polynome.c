@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include "animation.h"
 #include "polynome.h"
 
 polynome saisitPolynome(void)
@@ -197,4 +199,27 @@ polynome lagrange(nuage cloud)
 	    result = addtion_polinome(result,t);
 	}
 	return result;*/
+}
+animation creeAnimationLigneBrisee(nuage cloud)
+{
+	animation rv;
+	float lenght = 0;
+	for (int i = 0; i < cloud.nb - 1; ++i)
+	{
+		lenght += abs(cloud.x[i] - cloud.x[i + 1]);
+	}
+	int k = 0;
+	float b = 0;
+	int i;
+	for (i = 0; i< NB_INSTANTS; i++)
+	{
+		rv.param[i].x = (i * lenght)/NB_INSTANTS + cloud.x[0];
+		if((rv.param[i].x >= cloud.x[k + 1]) || (cloud.x[k + 1] - cloud.x[k] < 0))
+		{
+			k ++;
+		}
+		b = (cloud.y[k + 1]- cloud.y[k])/(cloud.x[k + 1] - cloud.x[k]);
+		rv.param[i].y = b * rv.param[i].x + cloud.y[k] - b * cloud.x[k];
+	}
+	return rv;
 }

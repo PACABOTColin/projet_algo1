@@ -2,6 +2,7 @@
 #define LCH 100
 
 #include "nuage.h"
+#include "animation.h"
 // This structure contain the degre , the numerator and the denominator of the polynomial 
 typedef struct polynome 
 {
@@ -21,3 +22,5 @@ polynome derivePolynome(polynome P); // This function calculates the derivative 
 polynome integrePolynome(polynome P); // this function calculates the integer value of polynomial
 
 polynome lagrange(nuage cloud); // interpolation de lagrange 
+
+animation creeAnimationLigneBrisee(nuage cloud); // create trajectory in broken line

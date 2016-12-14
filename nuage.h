@@ -26,6 +26,6 @@ typedef struct droite
 } droite;
 
 nuage ajoutPoint(nuage cloud, int x_min, int y_min, int x_max, int y_max); //this function add dote in cloud if the the mouse is cliked in the zone defined in argument
-void dessineNuage(nuage cloud, int x_min, int y_min, int x_max, int y_max); // this function displays in the zone the polinome
+void dessineNuage(nuage cloud); // this function displays in the zone the cloud
 
 #endif // NUAGE_H

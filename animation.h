@@ -11,6 +11,7 @@
  * Description: this file contain the function for make animation of sprite
  */
 #include "nuage.h"
+#include "BmpLib.h"
 #define NB_ATTITUDES 14 // NB_ATTITUDES define the number of sprite in one animation
 #define NB_INSTANTS 100 // NB_INSTANTS define the number of step in the animation displayed
 
@@ -28,6 +29,7 @@ typedef struct animation
 {
 	instant param[NB_INSTANTS]; 		// contain the parametre of animation
 	int current_state;				// contain the avancement of the animation
+	
 }animation;
 
 /* lectureImageAttitude read the sprite and stor it in attitude */
