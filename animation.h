@@ -29,7 +29,6 @@ typedef struct animation
 {
 	instant param[NB_INSTANTS]; 		// contain the parametre of animation
 	int current_state;				// contain the avancement of the animation
-	
 }animation;
 
 /* lectureImageAttitude read the sprite and stor it in attitude */

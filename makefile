@@ -24,7 +24,7 @@ nuage.o: nuage.c nuage.h GfxLib.h
 polygraph.o: polygraph.c polygraph.h polynome.h
 	gcc -c -Wall polygraph.c
 
-polynome.o: polynome.c polynome.h
+polynome.o: polynome.c polynome.h nuage.h
 	gcc -c -Wall polynome.c
 
 bouton.o: bouton.c bouton.h affichage.h

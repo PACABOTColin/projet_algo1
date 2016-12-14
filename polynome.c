@@ -3,6 +3,7 @@
 #include <string.h>
 #include "animation.h"
 #include "polynome.h"
+#include "nuage.h"
 
 polynome saisitPolynome(void)
 {
@@ -153,53 +154,6 @@ polynome addition_polinome (polynome a, polynome b)
 	return a;
 }
 
-//quotien addition_quotien (quotien a, quotien b)
-//{
-//	quotien result;
-//	result.den = a.den * b.den;
-//	result.num = a.num * b.den + b.num * a.den;
-//	return simplifyFraction(result);
-//}
-
-int PGCD(int u, int v) 
-{
-	if (u < 0) 
-	{
-		u = -u;
-	}
-	if (v < 0) 
-	{
-		v = -v;
-	}
-	if (v) 
-	{
-		while ((u %= v) && (v %= u));
-	}
-	return (u + v);
-}
-
-polynome lagrange(nuage cloud)
-{/*
-	polynome result;
-	polynome t;
-	result.degre = 0;
-	result.num[0] = 0;
-	result.den[0] = 1;
-	for(int k = 0; k < cloud.nb; k++)
-	{
-	    //t = new Polynom(p[k]->y);
-	    for(int i=0; i<n; i++)
-	    {
-	        if(i != k)
-	        {
-	            poly[k][i] = new Polynom( 1/(p[k]->x - p[i]->x) ,-p[i]->x/(p[k]->x-p[i]->x) );
-	            t = t->product(poly[k][i]);
-	        }
-	    }
-	    result = addtion_polinome(result,t);
-	}
-	return result;*/
-}
 animation creeAnimationLigneBrisee(nuage cloud)
 {
 	animation rv;

@@ -79,7 +79,7 @@ void gestionEvenement(EvenementGfx evenement)
 			lectureImageAttitude(attitude, "images/sprites/oiseauRouge%d.bmp");
 			anim = creeAnimation(cloud, attitude, 0);
 			slideButton[0] = slideBarInit(2 * largeurFenetre() / 30, 23 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS);
-			slideButton[1] = slideBarInit(26 * largeurFenetre() / 30, 29 * largeurFenetre() / 30, 9 * hauteurFenetre() / 35, 0, NB_INSTANTS);
+			slideButton[1] = slideBarInit(26 * largeurFenetre() / 30, 29 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS);
 			break;
 		
 		case Temporisation:
@@ -94,10 +94,7 @@ void gestionEvenement(EvenementGfx evenement)
 			
 			// The background color is white
 			effaceFenetre (255, 255, 255);
-			ecrisImage(0, 0,
-						background[button[5].etat]->largeurImage,
-						background[button[5].etat]->hauteurImage,
-						background[button[5].etat]->donneesRGB);
+			ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB);
 			afficheBouton(button);
 			dessineNuage(cloud);
 			afficheAnimation(anim);
@@ -156,13 +153,38 @@ void gestionEvenement(EvenementGfx evenement)
 			bouton_clic(button);
 			slideButton[0] = gereClicSlideBar(slideButton[0]);
 			slideButton[1] = gereClicSlideBar(slideButton[1]);
-		if(etatBoutonSouris() == GaucheAppuye && button[6].etat == 1 )
+		
+		if (etatBoutonSouris() == GaucheAppuye)
 			{
-				cloud = ajoutPoint(cloud, 0, 50, largeurFenetre() - 50, hauteurFenetre());
-				anim = creeAnimation(cloud, attitude, 1);
-				printf("nb points : %d \n", cloud.nb);
+				if (button[6].etat == 1 )
+					{
+						cloud = ajoutPoint(cloud, 0, 50, largeurFenetre() - 50, hauteurFenetre());
+						anim = creeAnimation(cloud, attitude, 1);
+						printf("nb points : %d \n", cloud.nb);
+					}
+			
+				if (button[0].etat == 1)
+					{
+						demandeTemporisation(-1);
+						anim.current_state = slideButton[0].value;
+						
+					}
+
+				if (button[0].etat == 0)
+					{
+						demandeTemporisation(20);
+					}
+
+				if (button[14].etat == 1)
+					{
+						libereDonneesImageRGB(&background[0]);
+						libereDonneesImageRGB(&background[1]); 
+						freeImages(anim);
+						termineBoucleEvenements();
+					}
+					
 			}
-			//rafraichisFenetre();
+			rafraichisFenetre();
 			break;
 
 		case Souris: // If the mouse is moved

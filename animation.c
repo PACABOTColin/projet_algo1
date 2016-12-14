@@ -46,7 +46,6 @@ animation creeAnimation(nuage points, DonneesImageRGB* attitude[], int mode)
 	}
 	for(int i = 0; i < NB_INSTANTS; ++i)
 	{
-		printf("%d, %d\n", anim.param[i].x, anim.param[i].y);
 		if(attitude[u] == NULL)
 		{
 			u = 0;
@@ -64,7 +63,6 @@ void afficheAnimation(animation anim)
 				anim.param[anim.current_state].attitude->largeurImage,
 				anim.param[anim.current_state].attitude->hauteurImage,
 				anim.param[anim.current_state].attitude->donneesRGB);
-	//printf("%d, %d\n", anim.param[anim.current_state].x, anim.param[anim.current_state].y);
 }
 
 animation lectureAnimation(animation anim)
