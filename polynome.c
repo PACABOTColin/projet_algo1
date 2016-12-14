@@ -211,14 +211,25 @@ animation creeAnimationLigneBrisee(nuage cloud)
 	int k = 0;
 	float b = 0;
 	int i;
+	int tmp = 0;
 	for (i = 0; i< NB_INSTANTS; i++)
 	{
-		rv.param[i].x = (i * lenght)/NB_INSTANTS + cloud.x[0];
-		if((rv.param[i].x >= cloud.x[k + 1]) || (cloud.x[k + 1] - cloud.x[k] < 0))
+		if(cloud.x[k] < cloud.x[k + 1])
+		{
+			rv.param[i].x = cloud.x[k] + ((i - tmp) * lenght)/NB_INSTANTS;
+		}
+		else
+		{
+			rv.param[i].x = cloud.x[k] - ((i - tmp) * lenght)/NB_INSTANTS;
+			printf("x %d\n", rv.param[i].x);
+		}
+		if((rv.param[i].x >= cloud.x[k + 1] && cloud.x[k] < cloud.x[k + 1])
+			|| (rv.param[i].x <= cloud.x[k + 1] && cloud.x[k] > cloud.x[k + 1]))
 		{
 			k ++;
+			tmp = i;
 		}
-		b = (cloud.y[k + 1]- cloud.y[k])/(cloud.x[k + 1] - cloud.x[k]);
+		b = (cloud.y[k + 1] - cloud.y[k]) / (cloud.x[k + 1] - cloud.x[k]);
 		rv.param[i].y = b * rv.param[i].x + cloud.y[k] - b * cloud.x[k];
 	}
 	return rv;
