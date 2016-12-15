@@ -104,49 +104,40 @@ void gestionEvenement(EvenementGfx evenement)
 			afficheBouton(button);
 
 			if (button[0].etat == 0)
+			{
+				if (animC==1)
 				{
-					if (animC==1)
-					{
-						afficheAnimation(anim);
-					}
+					afficheAnimation(anim);
 				}
+			}
 					
 			if (button[0].etat == 1 && animC==1)
-				{
-					afficheAnimation(anim);
-				}
+			{
+				afficheAnimation(anim);
+			}
 
 			if (button[2].etat == 1 && button[0].etat == 0)
-				{
-					anim.current_state=0;
-					slideButton[0].value=anim.current_state;
-				}
-
-			if (button[3].etat == 1 && button[3].ancienEtat==0 && button[0].etat == 0)
-				{
-					cloud.x[cloud.nb]=cloud.x[0];
-					cloud.y[cloud.nb]=cloud.y[0];
-					cloud.nb=cloud.nb +1;
-					anim =creeAnimation(cloud, attitude,1);
-					
-				}
+			{
+				anim.current_state=0;
+				slideButton[0].value=anim.current_state;
+			}
 				
 			if (button[4].etat == 1 && button[0].etat == 0)
-				{
-					slideButton[0].value=0;
-					afficheAnimation(anim);
-					slideButton[0].value = anim.current_state;
-				}
+			{
+				slideButton[0].value=0;
+				afficheAnimation(anim);
+				slideButton[0].value = anim.current_state;
+			}
 					
 			if (button[6].etat == 1)
-					{
-						dessineNuage(cloud);						
-					}
+			{
+				dessineNuage(cloud);						
+			}
 
 			if (button[7].etat == 1)
-					{
-						afficheLigne(cloud);						
-					}
+			{
+				afficheLigne(cloud);						
+			}
 					
 			//lectureAnimation(anim,button[2].etat);
 					
@@ -234,36 +225,22 @@ void gestionEvenement(EvenementGfx evenement)
 
 				
 				if (button[6].etat == 1 )
-					{
-						cloud = ajoutPoint(cloud, 0, 93, largeurFenetre() - 130, hauteurFenetre());
-						anim = creeAnimation(cloud, attitude, 1);
-					}
-				
-				if (button[8].etat == 1)
-					{
-						button[9].etat = 0;
-						button[10].etat = 0;
-					}
-
-				if (button[9].etat == 1)
-					{
-						button[8].etat = 0; 
-						button[10].etat = 0;
-					}
-
-				if (button[10].etat == 1)
-					{
-						button[8].etat = 0;
-						button[9].etat = 0;
-					}
-				if (button[8].etat ==1 && button[8].ancienEtat == 0)
 				{
+					cloud = ajoutPoint(cloud, 0, 93, largeurFenetre() - 130, hauteurFenetre());
+					anim = creeAnimation(cloud, attitude, 1);
+				}
+				
+				if (button[8].etat == 1 && button[8].ancienEtat == 0)
+				{
+					button[9].etat = 0;
+					button[10].etat = 0;
 					anim = creeAnimation(cloud, attitude, 3);
 					animC=1;
 				}
-
 				else if (button[9].etat ==1 && button[9].ancienEtat ==0)
 				{
+					button[8].etat = 0; 
+					button[10].etat = 0;
 					anim = creeAnimation(cloud, attitude, 2);
 					animC=1;
 				}
@@ -272,14 +249,29 @@ void gestionEvenement(EvenementGfx evenement)
 				{
 					anim = creeAnimation(cloud, attitude, 1);
 					animC=1;
+						button[8].etat = 0;
+						button[9].etat = 0;
 				}
 
 				if (button[14].etat == 1)
-					{
-						libereDonneesImageRGB(&background[0]);
-						libereDonneesImageRGB(&background[1]); 
-						termineBoucleEvenements();
-					}
+				{
+					libereDonneesImageRGB(&background[0]);
+					libereDonneesImageRGB(&background[1]); 
+					termineBoucleEvenements();
+				}
+
+				if (button[3].etat == 1 && button[3].ancienEtat==0 && button[10].etat == 1 && animC == 1)
+				{
+					cloud.x[cloud.nb] = cloud.x[0];
+					cloud.y[cloud.nb] = cloud.y[0];
+					cloud.nb++;
+					anim =creeAnimation(cloud, attitude,1);
+				}
+				else if(button[3].etat == 0 && button[3].ancienEtat == 1)
+				{
+					cloud.nb--;
+					anim =creeAnimation(cloud, attitude,1);
+				}
 			}
 			rafraichisFenetre();
 			break;
