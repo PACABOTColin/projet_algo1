@@ -1,13 +1,13 @@
 all : animation
 
-animation: animation.o polygraph.o polynome.o bouton.o affichage.o main.o nuage.o libisentlib.a
-	gcc -Wall animation.o polygraph.o polynome.o bouton.o affichage.o nuage.o main.o -o animation libisentlib.a -lm -lglut -lGL -lX11
+animation: animation.o polygraph.o polynome.o bouton.o main.o nuage.o imageSF.o libisentlib.a
+	gcc -Wall animation.o polygraph.o polynome.o bouton.o nuage.o main.o imageSF.o -o animation libisentlib.a -lm -lglut -lGL -lX11
 # Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
 # et de-commenter la ligne de commande ci-apres :
 #	gcc -Wall exemple.o -o exemple libisentlib.a -lm -framework OpenGL -framework GLUT
 
-animationTest: animation.o polygraph.o polynome.o bouton.o affichage.o mainTest.o libisentlib.a
-	gcc -Wall animation.o polygraph.o polynome.o bouton.o affichage.o mainTest.o -o animationTest libisentlib.a -lm -lglut -lGL -lX11
+animationTest: polynome.o polynome.h mainTest.o nuage.h
+	gcc -Wall polynome.o mainTest.o -o animationTest -lm
 # Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
 # et de-commenter la ligne de commande ci-apres :
 #	gcc -Wall exemple.o -o exemple libisentlib.a -lm -framework OpenGL -framework GLUT
@@ -18,6 +18,9 @@ exempleTortue: exempleTortue.o libisentlib.a
 # et de-commenter la ligne de commande ci-apres :
 #	gcc -Wall exempleTortue.o -o exempleTortue libisentlib.a -lm -framework OpenGL -framework GLU
 
+imageSF.o: imageSF.c imageSF.h GfxLib.h
+	gcc -c -Wall imageSF.c
+
 nuage.o: nuage.c nuage.h GfxLib.h
 	gcc -c -Wall nuage.c
 
@@ -27,11 +30,8 @@ polygraph.o: polygraph.c polygraph.h polynome.h
 polynome.o: polynome.c polynome.h nuage.h
 	gcc -c -Wall polynome.c
 
-bouton.o: bouton.c bouton.h affichage.h
+bouton.o: bouton.c bouton.h
 	gcc -c -Wall bouton.c
-
-affichage.o: affichage.c affichage.h bouton.h
-	gcc -c -Wall affichage.c
 
 main.o: main.c animation.h
 	gcc -c -Wall main.c

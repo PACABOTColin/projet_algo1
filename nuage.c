@@ -24,3 +24,13 @@ void dessineNuage(nuage cloud)
 		point(cloud.x[i], cloud.y[i]);
 	}
 }
+
+void afficheLigne (nuage cloud)
+{
+	epaisseurDeTrait(4);
+	couleurCourante(255, 255, 0);
+	for(int i = 0; i < cloud.nb-1; i++) 
+	{
+		ligne(cloud.x[i], cloud.y[i],cloud.x[i+1], cloud.y[i+1]);
+	}
+}

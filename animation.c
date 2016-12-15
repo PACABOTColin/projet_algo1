@@ -5,23 +5,44 @@
 
 #include "animation.h"
 #include "polynome.h"
+#include "imageSF.h"
 
 #define X_MAX_ANIMATION 620
 
-int lectureImageAttitude(DonneesImageRGB* attitude[], char nameFormat[])
+sprite lectureImageAttitude(char nameFormat[], char nameFormat2[])
 {
+	sprite rv;
 	char str[50]; // this varaiable will contain the name of the file who will be load
 	int i = 0;
 	do
 	{
 		sprintf(str, nameFormat,i+1);
-		attitude[i] = lisBMPRGB(str);
+		rv.attitude[i] = lisBMPRGB(str);
+		printf("loading : %s\n", str);
 		i++;
-	}while(attitude[i-1] != NULL);
-	return 0;
+	}while(rv.attitude[i-1] != NULL);
+	i--;
+	rv.nb = i;
+	do
+	{
+		sprintf(str, nameFormat2,(i - rv.nb)+1);
+		printf("loading : %s\n", str);
+		rv.attitude[i] = lisBMPRGB(str);
+		i++;
+	}while(rv.attitude[i-1] != NULL);
+	if (i - 1 !=(2 * rv.nb))
+	{
+		printf("erro during loading i : %d, rv : %d\n",i , rv.nb);
+	}
+	for (i = 0; i < rv.nb*2; ++i)
+	{
+		printf("rv.attitude[%d]=0X%X\n", i,rv.attitude[i]);
+	}
+	printf("nb de sprite charger 2X : %d\n", rv.nb);
+	return rv;
 }
 
-animation creeAnimation(nuage points, DonneesImageRGB* attitude[], int mode)
+animation creeAnimation(nuage points, sprite attitude, int mode)
 {
 	animation anim;
 	int u = 0;
@@ -29,54 +50,52 @@ animation creeAnimation(nuage points, DonneesImageRGB* attitude[], int mode)
 	{
 		mode = 0;
 	}
+	printf("nombre de sprite : %d\n", attitude.nb);
 	switch(mode)
 	{
 		case 1 :
 			printf("creeAnimationLigneBrisee\n");
-			anim = creeAnimationLigneBrisee(points);
+			anim = creeAnimationLigneBrisee(points, attitude);
 			break;
 		default : 
 			printf("default\n");
 			for(int i = 0; i < NB_INSTANTS; ++i)
 			{
-				anim.param[i].nAttitude = i % NB_ATTITUDES;
 				anim.param[i].x = (i * X_MAX_ANIMATION) / NB_INSTANTS;
 				anim.param[i].y = hauteurFenetre() / 2;
+				anim.param[i].attitude = attitude.attitude[u];
+				u++;
+				u = u % attitude.nb;
 			}
 	}
-	for(int i = 0; i < NB_INSTANTS; ++i)
-	{
-		if(attitude[u] == NULL)
-		{
-			u = 0;
-		}
-		anim.param[i].attitude = attitude[u];
-		u++;
-	}
 	anim.current_state = 0;
- 	return anim ;
+	return anim ;
 }
 
 void afficheAnimation(animation anim)
 {
-	ecrisImage(anim.param[anim.current_state].x, anim.param[anim.current_state].y,
+	couleur col;
+	col.r=0;
+	col.v=255;
+	col.b=0;
+
+	ecrisImageSansFond(anim.param[anim.current_state].x, anim.param[anim.current_state].y,
 				anim.param[anim.current_state].attitude->largeurImage,
 				anim.param[anim.current_state].attitude->hauteurImage,
-				anim.param[anim.current_state].attitude->donneesRGB);
+				anim.param[anim.current_state].attitude->donneesRGB,col);
 }
 
-animation lectureAnimation(animation anim)
+animation lectureAnimation(animation anim,int etat)
 {
-	anim.current_state++;
-	anim.current_state = anim.current_state % NB_INSTANTS;
-	//printf("pas : %d\n", anim.current_state);
-	return anim;
-}
-
-void freeImages(animation anim)
-{
-	for (int i = 0; i < NB_ATTITUDES; ++i)
+	
+	if (anim.current_state <NB_INSTANTS-1)
 	{
-		libereDonneesImageRGB(&anim.param[i].attitude);
+		anim.current_state++;
 	}
+	else if (etat == 1)
+	{
+		anim.current_state = 0;
+	}
+	
+	return anim;
 }

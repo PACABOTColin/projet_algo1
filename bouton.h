@@ -24,6 +24,7 @@ typedef struct bouton
 	DonneesImageRGB* image2;// this define the image
 	int etat;// this define the etat of the button
 	int etatEnfonce;// this define the etat of a push button
+	int ancienEtat;
 }bouton;
 
 typedef struct slideBar

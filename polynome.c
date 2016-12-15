@@ -5,37 +5,53 @@
 #include "polynome.h"
 #include "nuage.h"
 
-polynome saisitPolynome(void)
+int pgcd(int a, int b)
 {
-	int i;
-	polynome P;
-
-	do
+	if (a < 0) 
 	{
-		printf("Entrez le degré de votre polynome:  ");
-		scanf("%d",&P.degre);
+		a = -a;
 	}
-	while(!(P.degre <= DEGREMAX && P.degre >=0));
-
-	for (i=P.degre;i>=0;i--)
+	if (b < 0) 
 	{
-		printf("Entrez le numérateur du degré %d:  ",i);
-		scanf("%d",&P.num[i]);
-		do
-		{
-			printf("Entrez le dénominateur du degré %d:  ",i);
-			scanf("%d",&P.den[i]);
-		}
-		while(P.den[i] == 0);
+		b = -b;
 	}
-	for (i=0;i<=P.degre;i++)
+	if (b) 
 	{
-		printf("\nLa valeur de la case num[%d] est :   %d",i,P.num[i]);
-		printf("\nLa valeur de la case den[%d] est :   %d\n",i,P.den[i]);
+		while ((a %= b) && (b %= a));
 	}
-	return P;
+	return (a + b);
 }
 
+quotien simplifiQuotien (quotien a)
+{
+	if(a.den < 0)
+	{
+		a.den = abs(a.den);
+		a.num = 0 - a.num;
+	}
+	int d = abs(pgcd(a.num, a.den));
+	a.num = a.num / d;
+	a.den = a.den / d;
+	return a;
+}
+
+quotien additionQuotien(quotien a, quotien b)
+{
+	quotien rv;
+	rv.num = a.den * b.num + b.den * a.num;
+	rv.den = a.den * b.den;
+	rv = simplifiQuotien(rv);
+	return rv;
+}
+
+quotien multipliQuotien(quotien a, quotien b)
+{
+	quotien rv;
+	rv.num = a.num * b.num;
+	rv.den = a.den * b.den;
+	rv = simplifiQuotien(rv);
+	return rv;
+}
 
 void exprimePolynome(polynome P, char expression[LCH])
 {
@@ -45,20 +61,19 @@ void exprimePolynome(polynome P, char expression[LCH])
     null='0';
     for(i = P.degre; i >= 0; i--)
     {
-        if(P.num[i] != 0)
+        if(P.coef[i].num != 0)
         {
-            vanum=P.num[i]<0?-P.num[i]:P.num[i];
-            vaden=P.den[i]<0?-P.den[i]:P.den[i];
-            signe=P.num[i]*P.den[i]>0?'+':'-';
+            vanum = P.coef[i].num < 0 ? -P.coef[i].num : P.coef[i].num;
+            vaden = P.coef[i].den;
+            signe = P.coef[i].num > 0 ? '+' : '-' ;
             if(i == P.degre)
             {
-                if(P.num[i] < 0)
+                if(P.coef[i].num < 0)
                     sprintf(chaine,"%c (%d/%d)x^%d ",signe,vanum,vaden,i);
-                if(P.num[i] > 0)
+                if(P.coef[i].num > 0)
                     sprintf(chaine,"(%d/%d)x^%d ",vanum,vaden,i);
             }
-            else
-                sprintf(chaine,"%c(%d/%d)x^%d ",signe,vanum,vaden,i);
+            sprintf(chaine,"%c(%d/%d)x^%d ",signe,vanum,vaden,i);
             if(i == 1 && i != P.degre)
                 sprintf(chaine,"%c(%d/%d)x",signe,vanum,vaden);
             if(i == 0 && i != P.degre)
@@ -105,8 +120,8 @@ polynome derivePolynome(polynome P)
 	Pderive.degre = (P.degre ==0)?0:P.degre-1;
 	for(i=1;i<= P.degre;i++)
 	{
-		Pderive.num[i-1]=P.num[i]*i;
-		Pderive.den[i-1]= P.den[i];
+		Pderive.coef[i-1].num=P.coef[i].num*i;
+		Pderive.coef[i-1].den= P.coef[i].den;
 	}
 	return Pderive;
 }
@@ -119,11 +134,11 @@ polynome integrePolynome(polynome P)
 	Pintegre.degre = P.degre + 1;
 	for(i=Pintegre.degre;i>=0;i--)
 	{
-		Pintegre.num[i+1]=P.num[i];
-		Pintegre.den[i+1]= P.den[i]*(i+1);
+		Pintegre.coef[i+1].num=P.coef[i].num;
+		Pintegre.coef[i+1].den= P.coef[i].den*(i+1);
 	}
-	Pintegre.num[0]=0;
-    Pintegre.den[0]=1;
+	Pintegre.coef[0].num=0;
+    Pintegre.coef[0].den=1;
 
 	return Pintegre;
 }
@@ -135,12 +150,12 @@ float evaluePolynome (float x, polynome P)
 	
 	for(i = P.degre; i >= 0; i--)
 	{
-		v=v*x+(P.num[i]/P.den[i]);
+		v=v*x+(P.coef[i].num/P.coef[i].den);
 	}
 	return v;
 }
 
-polynome addition_polinome (polynome a, polynome b)
+polynome additionPolynome (polynome a, polynome b)
 {
 	if (a.degre < b.degre)
 	{
@@ -148,13 +163,83 @@ polynome addition_polinome (polynome a, polynome b)
 		a = b;
 		b = c;
 	}
-	for (int i = 0; i < b.degre; ++i)
+	for (int i = 0; i <= b.degre; ++i)
 	{
+		a.coef[i] = additionQuotien(a.coef[i], b.coef[i]);
 	}
 	return a;
 }
 
-animation creeAnimationLigneBrisee(nuage cloud)
+polynome initialise_polynome(int c)
+{
+	polynome rv;
+	for (int i = 0; i < DEGREMAX; ++i)
+	{
+		rv.coef[i].num = c;
+		rv.coef[i].den = 1;
+	}
+	rv.degre = 0;
+	return rv;
+}
+
+polynome multipliPolynome(polynome a, polynome b)
+{
+	polynome rv;
+	char str[100];
+	rv = initialise_polynome(0);
+	for (int i = 0; i <= a.degre; ++i)
+	{
+		for (int u = 0; u <= b.degre; ++u)
+		{
+			polynome tmp = initialise_polynome(0);
+			tmp.degre = u + i;
+			tmp.coef[tmp.degre] = multipliQuotien(a.coef[i], b.coef[u]);
+			rv = additionPolynome(tmp, rv);
+			exprimePolynome(rv, str);
+		}
+	}
+	rv.degre = a.degre + b.degre;
+	return rv;
+}
+
+polynome lagrange (nuage cloud)
+{
+	char str[100];
+	polynome rv, tmp, tmp2;
+	rv = initialise_polynome(0);
+	for (int i = 0; i < cloud.nb - 1; ++i)
+	{
+		tmp = initialise_polynome(1);
+		for (int j = 0; j < cloud.nb - 1; ++j)
+		{
+			printf("i : %d\tj : %d\n", i, j);
+			if(i != j)
+			{
+				tmp2 = initialise_polynome(1);
+				tmp2.degre = 1;
+				tmp2.coef[0].num = -cloud.x[j];
+				tmp2.coef[0].den = cloud.x[i] - cloud.x[j];
+				tmp2.coef[1].den = cloud.x[i] - cloud.x[j];
+				tmp2.coef[1].num = 1;
+				tmp = multipliPolynome(tmp2, tmp);
+				exprimePolynome(tmp2, str);
+				printf("tmp2 : %s\n", str);
+				exprimePolynome(tmp, str);
+				printf("tmp : %s, degre :%d \n", str, tmp.degre);
+			}
+		}
+		tmp2 = initialise_polynome(0);
+		tmp2.degre = 0;
+		tmp2.coef[0].num = cloud.y[i];
+		tmp = multipliPolynome(tmp2, tmp);
+		rv = additionPolynome(rv, tmp);
+		exprimePolynome(rv, str);
+		printf("--------->rv : %s\n", str);
+	}
+	return rv;
+}
+
+animation creeAnimationLigneBrisee(nuage cloud, sprite attitude)
 {
 	animation rv;
 	float lenght = 0;
@@ -165,17 +250,19 @@ animation creeAnimationLigneBrisee(nuage cloud)
 	int k = 0;
 	float b = 0;
 	int i;
+	int offset = 0;
 	int tmp = 0;
 	for (i = 0; i< NB_INSTANTS; i++)
 	{
 		if(cloud.x[k] < cloud.x[k + 1])
 		{
-			rv.param[i].x = cloud.x[k] + ((i - tmp) * lenght)/NB_INSTANTS;
+			rv.param[i].x = cloud.x[k] + ((i - tmp) * lenght) / NB_INSTANTS;
+			offset = 0;
 		}
 		else
 		{
-			rv.param[i].x = cloud.x[k] - ((i - tmp) * lenght)/NB_INSTANTS;
-			printf("x %d\n", rv.param[i].x);
+			rv.param[i].x = cloud.x[k] - ((i - tmp) * lenght) / NB_INSTANTS;
+			offset = attitude.nb;
 		}
 		if((rv.param[i].x >= cloud.x[k + 1] && cloud.x[k] < cloud.x[k + 1])
 			|| (rv.param[i].x <= cloud.x[k + 1] && cloud.x[k] > cloud.x[k + 1]))
@@ -185,6 +272,7 @@ animation creeAnimationLigneBrisee(nuage cloud)
 		}
 		b = (cloud.y[k + 1] - cloud.y[k]) / (cloud.x[k + 1] - cloud.x[k]);
 		rv.param[i].y = b * rv.param[i].x + cloud.y[k] - b * cloud.x[k];
+		rv.param[i].attitude = attitude.attitude[(i%attitude.nb) + offset];
 	}
 	return rv;
 }

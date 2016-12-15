@@ -3,7 +3,6 @@
 
 #include "GfxLib.h" // Only this "#include" is needed to use graphic
 #include "BmpLib.h" // with this "#include" we can treat BMP's files
-#include "affichage.h"
 #include "bouton.h"
 
 bouton initialiseB(char image1[], char image2[], int etatEnfonce)
@@ -21,7 +20,7 @@ bouton initialiseB(char image1[], char image2[], int etatEnfonce)
 	}
 	button.etat = 0;
 	button.etatEnfonce = etatEnfonce;
-	printf("etat button : %d\n", etatEnfonce);
+	button.ancienEtat = 0;
 	return button;
 }
 
@@ -29,21 +28,24 @@ void initialiseBoutons(bouton button[])
 {
 	button[0] = initialiseB("images/Boutons/playButton.bmp","images/Boutons/pauseButton.bmp", 1);
 	button[1] = initialiseB("images/Boutons/stopButton.bmp","images/Boutons/stopButton.bmp", 0);
-	button[2] = initialiseB("images/Boutons/resetButton.bmp","images/Boutons/resetButton.bmp", 0);
-	button[3] = initialiseB("images/Boutons/LoopButton.bmp","images/Boutons/LoopButton.bmp", 1);
-	button[4] = initialiseB("images/Boutons/repeatButton.bmp","images/Boutons/repeatButton.bmp", 0);
+	button[2] = initialiseB("images/Boutons/resetButton.bmp","images/Boutons/resetButton_Appuis.bmp", 0);
+	button[3] = initialiseB("images/Boutons/LoopButton.bmp","images/Boutons/LoopButton_Appuis.bmp", 1);
+	button[4] = initialiseB("images/Boutons/repeatButton.bmp","images/Boutons/repeatButton_Appuis.bmp", 1);
 	button[5] = initialiseB("images/Boutons/editButton.bmp","images/Boutons/editButton.bmp", 1);
 	
 	button[6] = initialiseB("images/Boutons/Debut_Saisie.bmp","images/Boutons/Fin_Saisie.bmp", 1);
 	
-	button[7] = initialiseB("images/Boutons/affiche_Courbe.bmp","images/Boutons/affiche_Courbe_Appuis.bmp", 0);
-	button[8] = initialiseB("images/Boutons/Lagrange.bmp","images/Boutons/Lagrange_Appuis.bmp", 0);
-	button[9] = initialiseB("images/Boutons/Newton.bmp","images/Boutons/Newton_Appuis.bmp", 0);
-	button[10] = initialiseB("images/Boutons/Ligne_Brisee.bmp","images/Boutons/Ligne_Brisee_Appuis.bmp", 0);
+	button[7] = initialiseB("images/Boutons/affiche_Courbe.bmp","images/Boutons/affiche_Courbe_Appuis.bmp", 1);
+	button[8] = initialiseB("images/Boutons/Lagrange.bmp","images/Boutons/Lagrange_Appuis.bmp", 1);
+	button[9] = initialiseB("images/Boutons/Newton.bmp","images/Boutons/Newton_Appuis.bmp", 1);
+	button[10] = initialiseB("images/Boutons/Ligne_Brisee.bmp","images/Boutons/Ligne_Brisee_Appuis.bmp", 1);
 	button[11] = initialiseB("images/sprites/oiseauRouge3.bmp","images/sprites/oiseauRouge8.bmp", 1);
 	button[12] = initialiseB("images/sprites/oiseauRouge3.bmp","images/sprites/oiseauRouge8.bmp", 1);
 	button[13] = initialiseB("images/sprites/oiseauRouge3.bmp","images/sprites/oiseauRouge8.bmp", 1);
 	button[14] = initialiseB("images/Boutons/off_Button.bmp","images/Boutons/off_Appuis.bmp", 1);
+	
+	button[0].etat=1;
+	
 }
 
 bouton coordonnee (bouton button,int xmin,int ymin,int xmax,int ymax)
@@ -74,8 +76,8 @@ void redimensionne (bouton button[])
 	button[9]=	coordonnee(button[9],26 *	largeurFenetre()/30,12 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,14 * 	hauteurFenetre()/35);
 
 	button[10]=	coordonnee(button[10],26 * largeurFenetre()/30,15 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,17  * 	hauteurFenetre()/35);
-	button[11]=	coordonnee(button[11],26.5 *	largeurFenetre()/30,18 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,21 * 	hauteurFenetre()/35);
-	button[12]=	coordonnee(button[12],26.5 *	largeurFenetre()/30,22 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,25 * 	hauteurFenetre()/35);
+	button[11]=	coordonnee(button[11],26.5 *largeurFenetre()/30,18 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,21 * 	hauteurFenetre()/35);
+	button[12]=	coordonnee(button[12],26.5 *largeurFenetre()/30,22 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,25 * 	hauteurFenetre()/35);
 	button[13]=	coordonnee(button[13],26.5 *largeurFenetre()/30,26 * 	hauteurFenetre()/35,29.5 * largeurFenetre()/30,29 * 	hauteurFenetre()/35);
 	button[14]=	coordonnee(button[14],26 *	largeurFenetre()/30,31 * 	hauteurFenetre()/35,29 * largeurFenetre()/30,34 * 	hauteurFenetre()/35);
 	
@@ -103,6 +105,7 @@ void bouton_clic(bouton button[])
 {
 	for (int i = 0; i < NB_BOUTON; ++i)
 	{
+		button[i].ancienEtat = button[i].etat;
 		if(etatBoutonSouris() == GaucheAppuye
 			&& abscisseSouris() > button[i].xmin && abscisseSouris() < button[i].xmax 
 			&& ordonneeSouris() > button[i].ymin && ordonneeSouris() < button[i].ymax)
@@ -147,6 +150,7 @@ slideBar slideBarSetValue(slideBar slide, int value)
 void printSlideBar(slideBar slide)
 {
 	couleurCourante(50, 50, 50);
+	epaisseurDeTrait(4);
 	ligne(slide.xmin, slide.y, slide.xmax, slide.y);
 	couleurCourante(0, 0, 0);
 	int x = (slide.value - slide.valMin) * (slide.xmax - slide.xmin) / (slide.valMax - slide.valMin) + slide.xmin;

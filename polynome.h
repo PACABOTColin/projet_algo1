@@ -3,12 +3,19 @@
 
 #include "nuage.h"
 #include "animation.h"
-// This structure contain the degre , the numerator and the denominator of the polynomial 
+
+// this structurre contain the numerator and the denominator of one quotien
+typedef struct quotien
+{
+	unsigned int num; // contain the numerateur of the fraction
+	unsigned int den; // contain the denominateur on the fraction
+}quotien;
+
+// This structure contain the degre and the coefiten of one polynome 
 typedef struct polynome 
 {
 	int degre; // contain the degre of the polynomial
-	int num[DEGREMAX+1]; // contain the numerator of the polynomial
-	int den[DEGREMAX+1]; // contain the denominator of the polynomial
+	quotien coef[DEGREMAX]; // contain the polynomial coefitien
 	
 }polynome;
 
@@ -23,4 +30,6 @@ polynome integrePolynome(polynome P); // this function calculates the integer va
 
 polynome lagrange(nuage cloud); // interpolation de lagrange 
 
-animation creeAnimationLigneBrisee(nuage cloud); // create trajectory in broken line
+animation creeAnimationLigneBrisee(nuage cloud, sprite attitude); // create trajectory in broken line
+
+void exprimePolynome(polynome P, char expression[LCH]); //print the polynomal expretion in str

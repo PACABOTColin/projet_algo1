@@ -12,17 +12,22 @@
  */
 #include "nuage.h"
 #include "BmpLib.h"
-#define NB_ATTITUDES 14 // NB_ATTITUDES define the number of sprite in one animation
+#define NB_ATTITUDES 50 // NB_ATTITUDES define the number of sprite in one animation
 #define NB_INSTANTS 100 // NB_INSTANTS define the number of step in the animation displayed
 
 
 /* this structure contain the position and the number of the picture */
 typedef struct instant
 {
-	int nAttitude; 				// contain the number of the sprite used
 	int x,y;					// contain the positon to print the pixel
 	DonneesImageRGB* attitude; 	// contain the image of the animation
 }instant;
+
+typedef struct sprite
+{
+	DonneesImageRGB* attitude[NB_ATTITUDES];
+	int nb;
+}sprite;
 
 /*this structure conain all the information for one animation*/
 typedef struct animation
@@ -32,15 +37,13 @@ typedef struct animation
 }animation;
 
 /* lectureImageAttitude read the sprite and stor it in attitude */
-int lectureImageAttitude(DonneesImageRGB* attitude[], char nameFormat[]);
+sprite lectureImageAttitude(char nameFormat[], char nameFormat2[]);
 /* creeAnimation make the animation output in array animation */
 /* lectureAnimation forward the animation */
-animation creeAnimation(nuage points, DonneesImageRGB* attitude[], int mode);
+animation creeAnimation(nuage points, sprite attitude, int mode);
 /* afficheAnimation display the animation on the screen */
 void afficheAnimation(animation anim);
-/* freeImages free memory used by the image */
-void freeImages(animation anim);
 /* this function made animation forwarde*/
-animation lectureAnimation(animation anim);
+animation lectureAnimation(animation anim,int etat);
 
 #endif
