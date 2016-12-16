@@ -4,6 +4,7 @@
 #include "GfxLib.h" // Only this "#include" is needed to use graphic
 #include "BmpLib.h" // with this "#include" we can treat BMP's files
 #include "bouton.h"
+#include "imageSF.h"
 
 bouton initialiseB(char image1[], char image2[], int etatEnfonce)
 {
@@ -40,9 +41,9 @@ void initialiseBoutons(bouton button[])
 	button[8] = initialiseB("images/Boutons/Lagrange.bmp","images/Boutons/Lagrange_Appuis.bmp", 1);
 	button[9] = initialiseB("images/Boutons/Newton.bmp","images/Boutons/Newton_Appuis.bmp", 1);
 	button[10] = initialiseB("images/Boutons/Ligne_Brisee.bmp","images/Boutons/Ligne_Brisee_Appuis.bmp", 1);
-	button[11] = initialiseB("images/sprites/oiseauRouge3.bmp","images/sprites/oiseauRouge8.bmp", 1);
-	button[12] = initialiseB("images/sprites/oiseauRouge3.bmp","images/sprites/oiseauRouge8.bmp", 1);
-	button[13] = initialiseB("images/sprites/oiseauRouge3.bmp","images/sprites/oiseauRouge8.bmp", 1);
+	button[11] = initialiseB("images/sprites/oiseauRouge1.bmp","images/sprites/oiseauRouge8.bmp", 1);
+	button[12] = initialiseB("images/sprites/oiseauBleuBouton1.bmp","images/sprites/oiseauBleu3.bmp", 1);
+	button[13] = initialiseB("images/sprites/fusee_button_1.bmp","images/sprites/fusee3.bmp", 1);
 	button[14] = initialiseB("images/Boutons/off_Button.bmp","images/Boutons/off_Appuis.bmp", 1);
 	
 	button[0].etat=1;
@@ -88,17 +89,21 @@ void redimensionne (bouton button[])
 void afficheBouton(bouton button[NB_BOUTON])
 {
 	int i;
+	couleur col;
+	col.r=0;
+	col.v=255;
+	col.b=0;
 	for (i=0;i<NB_BOUTON;i++)
 	{
 		if (button[i].etat==0)// print the first picture if the state is 0
 		{
 			//ecrisImage(((button[i].xmax - button[i].xmin) - button[i].image1->largeurImage)/2, ((button[i].ymax - button[i].ymin) - button[i].image1->hauteurImage)/2, button[i].image1->largeurImage,	button[i].image1->hauteurImage, button[i].image1->donneesRGB);
-			ecrisImage(button[i].xmin, button[i].ymin , button[i].image1->largeurImage, button[i].image1->hauteurImage, button[i].image1->donneesRGB);
-		}
+			ecrisImageSansFond(button[i].xmin, button[i].ymin , button[i].image1->largeurImage, button[i].image1->hauteurImage, button[i].image1->donneesRGB,col);
+		}	
 		else // prins the secon pitur else
 		{
 			//ecrisImage(((button[i].xmax-button[i].xmin) - button[i].image2->largeurImage)/2, ((button[i].ymax - button[i].ymin) - button[i].image2->hauteurImage)/2, button[i].image2->largeurImage, button[i].image2->hauteurImage, button[i].image2->donneesRGB);
-			ecrisImage(button[i].xmin, button[i].ymin , button[i].image2->largeurImage, button[i].image2->hauteurImage, button[i].image2->donneesRGB);
+			ecrisImageSansFond(button[i].xmin, button[i].ymin , button[i].image2->largeurImage, button[i].image2->hauteurImage, button[i].image2->donneesRGB,col);
 		}
 	}
 }
