@@ -34,6 +34,11 @@ typedef struct animation
 {
 	instant param[NB_INSTANTS]; 		// contain the parametre of animation
 	int current_state;				// contain the avancement of the animation
+	int type;						//conatain the type of the animation -1 for uninitilizes animation
+									//									 0 for horoisontal animation
+									//									 1 for the broken line antimatio
+									//									 2 for the polinomial aproximation whith lagrange methode
+									//									 3 for the polinomial aproximation whith newtown methode
 }animation;
 
 /* lectureImageAttitude read the sprite and stor it in attitude */

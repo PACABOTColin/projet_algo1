@@ -78,11 +78,14 @@ void afficheAnimation(animation anim)
 	col.r=0;
 	col.v=255;
 	col.b=0;
-
-	ecrisImageSansFond(anim.param[anim.current_state].x, anim.param[anim.current_state].y,
+	if (anim.type >=0)
+	{
+		ecrisImageSansFond(anim.param[anim.current_state].x, anim.param[anim.current_state].y,
 				anim.param[anim.current_state].attitude->largeurImage,
 				anim.param[anim.current_state].attitude->hauteurImage,
 				anim.param[anim.current_state].attitude->donneesRGB,col);
+	}
+	
 }
 
 animation lectureAnimation(animation anim,int etat)

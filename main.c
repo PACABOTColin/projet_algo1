@@ -8,7 +8,7 @@
 #include "bouton.h" // to use the button functon
 #include "polynome.h" // to use the polynomial functon
 #include "nuage.h"
-
+#define NUMBER_OF_SPRIT 3
 // Picture default width and height
 #define LargeurFenetre 807
 #define HauteurFenetre 593
@@ -41,7 +41,7 @@ void cercle(float centreX, float centreY, float rayon)
 	const double PasAngulaire = 2.*M_PI/Pas;
 	int index;
 	
-	for (index = 0; index < Pas; ++index) // for each sectors
+	for(index = 0; index < Pas; ++index) // for each sectors
 	{
 		const double angle = 2.*M_PI*index/Pas; // We calculate the starting angle of the sector
 		triangle(centreX, centreY,
@@ -61,13 +61,13 @@ void gestionEvenement(EvenementGfx evenement)
 	static DonneesImageRGB* background[2];
 	static bouton button[NB_BOUTON];
 	static slideBar slideButton[2];
-	static sprite attitude;
-	static animation anim;
+	static sprite attitude[NUMBER_OF_SPRIT];
+	static animation anim[NUMBER_OF_SPRIT];
 	static nuage cloud;
 	static int animC=0;
 
 
-	switch (evenement)
+	switch(evenement)
 	{
 		case Initialisation:
 
@@ -76,10 +76,15 @@ void gestionEvenement(EvenementGfx evenement)
 			cloud.nb = 0; //initialyse cloud
 			initialiseBoutons(button);
 			redimensionne(button);
+			for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
+			{
+				anim[i].type = -1;
+			}
 			background[0] = lisBMPRGB("images/IHM.bmp");
 			background[1] = lisBMPRGB("images/IHM_edit.bmp");
-			attitude = lectureImageAttitude("images/sprites/oiseauRouge%d.bmp", "images/sprites/oiseauRouge%d_reverse.bmp");
-			//attitude = lectureImageAttitude("images/sprites/aigle%d_reverse.bmp", "images/sprites/aigle%d.bmp");
+			attitude[0] = lectureImageAttitude("images/sprites/oiseauRouge%d.bmp", "images/sprites/oiseauRouge%d_reverse.bmp");
+			attitude[1] = lectureImageAttitude("images/sprites/aigle%d_reverse.bmp", "images/sprites/aigle%d.bmp");
+			attitude[2] = lectureImageAttitude("images/sprites/fusee%d.bmp", "images/sprites/fusee%d_reverse.bmp");
 			slideButton[0] = slideBarInit(2 * largeurFenetre() / 30, 23 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS);
 			slideButton[1] = slideBarInit(26 * largeurFenetre() / 30, 29 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS);
 			break;
@@ -87,11 +92,14 @@ void gestionEvenement(EvenementGfx evenement)
 		case Temporisation:
 
 			// we update the window
-			anim.current_state = slideButton[0].value;
-			anim = lectureAnimation(anim,button[4].etat);
-			if (animC==1)
+			for(int i = 0; i < NUMBER_OF_SPRIT; ++i)
 			{
-				slideButton[0].value = anim.current_state;
+				anim[i].current_state = slideButton[0].value;
+				anim[i] = lectureAnimation(anim[i], button[4].etat);
+				if(animC==1)
+				{
+					slideButton[0].value = anim[i].current_state;
+				}
 			}
 			rafraichisFenetre();
 			break;
@@ -99,56 +107,56 @@ void gestionEvenement(EvenementGfx evenement)
 		case Affichage:
 
 			// The background color is white
-			effaceFenetre (255, 255, 255);
+			effaceFenetre(255, 255, 255);
 			ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB);
 			afficheBouton(button);
 
-			if (button[0].etat == 0)
+			if(animC==1)
 			{
-				if (animC==1)
+				for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
 				{
-					afficheAnimation(anim);
+				afficheAnimation(anim[i]);
 				}
 			}
-					
-			if (button[0].etat == 1 && animC==1)
-			{
-				afficheAnimation(anim);
-			}
 
-			if (button[2].etat == 1 && button[0].etat == 0)
+			if(button[2].etat == 1 && button[0].etat == 0)
 			{
-				anim.current_state=0;
-				slideButton[0].value=anim.current_state;
+				for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
+				{
+					anim[i].current_state=0;
+					slideButton[0].value=anim[i].current_state;
+				}
 			}
 				
-			if (button[4].etat == 1 && button[0].etat == 0)
+			/*if(button[4].etat == 1 && button[0].etat == 0)
 			{
-				slideButton[0].value=0;
-				afficheAnimation(anim);
-				slideButton[0].value = anim.current_state;
-			}
+				for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
+				{
+					anim[i].current_state=0;
+					afficheAnimation(anim[i]);
+				}
+				printf("reset\n");
+				slideButton[0].value = anim[0].current_state;
+			}*/
 					
-			if (button[6].etat == 1)
+			if(button[6].etat == 1)
 			{
 				dessineNuage(cloud);						
 			}
 
-			if (button[7].etat == 1)
+			if(button[7].etat == 1)
 			{
 				afficheLigne(cloud);						
 			}
 					
-			//lectureAnimation(anim,button[2].etat);
-					
 			printSlideBar(slideButton[0]);
-			printSlideBar(slideButton[1]);
+			//printSlideBar(slideButton[1]);
 			break;
 			
 		case Clavier:
 			printf("%c : ASCII %d\n", caractereClavier(), caractereClavier());
 
-			switch (caractereClavier())
+			switch(caractereClavier())
 			{
 				case 'Q': /* to leave the program */
 				case 'q':
@@ -160,7 +168,7 @@ void gestionEvenement(EvenementGfx evenement)
 				case 'F':
 				case 'f':
 					pleinEcran = !pleinEcran; // Change the full screen mode
-					if (pleinEcran)
+					if(pleinEcran)
 						modePleinEcran();
 					else
 						redimensionneFenetre(LargeurFenetre, HauteurFenetre);
@@ -168,13 +176,13 @@ void gestionEvenement(EvenementGfx evenement)
 
 				case 'R':
 				case 'r':
-					// Configure the system for generate a temposrisation message every 20 millisecond (fast)
+					// Configure the system for generate a temposrisation message every 20 millisecond(fast)
 					demandeTemporisation(20);
 					break;
 
 				case 'L':
 				case 'l':
-					// Configure the system for generate a temposrisation message every 20 millisecond (slow)
+					// Configure the system for generate a temposrisation message every 20 millisecond(slow)
 					demandeTemporisation(100);
 					break;
 
@@ -195,82 +203,129 @@ void gestionEvenement(EvenementGfx evenement)
 			bouton_clic(button);
 			slideButton[0] = gereClicSlideBar(slideButton[0]);
 			slideButton[1] = gereClicSlideBar(slideButton[1]);
-		if (etatBoutonSouris() == GaucheAppuye)
+		if(etatBoutonSouris() == GaucheAppuye)
 			{
-				if (button[0].etat == 1)
+				int bird_index;
+				if (button[11].etat == 1)
 				{
-					demandeTemporisation(-1);
-					anim.current_state = slideButton[0].value;
+					bird_index = 0;
+				}
+				else if (button[12].etat == 1)
+				{
+					bird_index = 1;
+				}
+				else if (button[13].etat == 1)
+				{
+					bird_index = 2;
 				}
 				else
+				{
+					bird_index = -1;
+				}
+				// if the bird changed reset the cloud
+				for (int i = 11; i <= 13; ++i)
+				{
+					if (button[i].etat != button[i].ancienEtat)
+					{
+						cloud.nb = 0;
+					}
+				}
+				if(button[0].etat == 1 && button[0].ancienEtat == 0)
+				{
+					demandeTemporisation(-1);
+				}
+				else if(button[0].etat == 0 && button[0].ancienEtat == 1)
 				{
 					demandeTemporisation(20);
 				}
 					
-				if (button[1].etat == 1)
+				if(button[1].etat == 1)
 				{
 					demandeTemporisation(-1);
 					animC=0;
-					anim.current_state = slideButton[0].value;
 					slideButton[0].value=0;
+					for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
+					{
+						anim[i].current_state = slideButton[0].value;
+					}
 					initialiseBoutons(button);
 					redimensionne(button);
 					cloud.nb=0;
 				}
 
-				if (button[4].etat == 1)
+				if(button[4].etat == 1)
 				{
 					button[2].etat=0;
 				}
-
-				
-				if (button[6].etat == 1 )
+				if(button[6].etat == 1 )
 				{
+					
 					cloud = ajoutPoint(cloud, 0, 93, largeurFenetre() - 130, hauteurFenetre());
-					anim = creeAnimation(cloud, attitude, 1);
+					int animationType;
+					if(button[8].etat == 1)
+					{
+						animationType = 3;
+					}
+					else if(button[9].etat == 1)
+					{
+						animationType = 2;
+					}
+					else if (button[10].etat == 1)
+					{
+						animationType = 1;
+					}
+					else 
+					{
+						animationType = 0;
+					}
+					printf("bird_index : %d\n", bird_index);
+					if (bird_index > -1 && bird_index < NUMBER_OF_SPRIT)
+					{
+						printf("creeAnimation\n");
+						anim[bird_index] = creeAnimation(cloud, attitude[bird_index], animationType);
+					}
+
+					
 				}
 				
-				if (button[8].etat == 1 && button[8].ancienEtat == 0)
+				if(button[8].etat == 1 && button[8].ancienEtat == 0)
 				{
 					button[9].etat = 0;
 					button[10].etat = 0;
-					anim = creeAnimation(cloud, attitude, 3);
 					animC=1;
 				}
-				else if (button[9].etat ==1 && button[9].ancienEtat ==0)
+				else if(button[9].etat ==1 && button[9].ancienEtat ==0)
 				{
 					button[8].etat = 0; 
 					button[10].etat = 0;
-					anim = creeAnimation(cloud, attitude, 2);
 					animC=1;
 				}
 
-				else if (button[10].etat ==1 && button[10].ancienEtat ==0)
+				else if(button[10].etat ==1 && button[10].ancienEtat ==0)
 				{
-					anim = creeAnimation(cloud, attitude, 1);
 					animC=1;
-						button[8].etat = 0;
-						button[9].etat = 0;
+					button[8].etat = 0;
+					button[9].etat = 0;
 				}
 
-				if (button[14].etat == 1)
+				if(button[14].etat == 1)
 				{
 					libereDonneesImageRGB(&background[0]);
 					libereDonneesImageRGB(&background[1]); 
 					termineBoucleEvenements();
 				}
 
-				if (button[3].etat == 1 && button[3].ancienEtat==0 && button[10].etat == 1 && animC == 1)
+				if(button[3].etat == 1 && button[3].ancienEtat==0 && button[10].etat == 1)
 				{
 					cloud.x[cloud.nb] = cloud.x[0];
 					cloud.y[cloud.nb] = cloud.y[0];
 					cloud.nb++;
-					anim =creeAnimation(cloud, attitude,1);
+					anim[bird_index] =creeAnimation(cloud, attitude[bird_index],1);
 				}
-				else if(button[3].etat == 0 && button[3].ancienEtat == 1)
+				else if(button[3].etat == 0 && button[3].ancienEtat == 1 && button[10].etat == 1)
 				{
 					cloud.nb--;
-					anim =creeAnimation(cloud, attitude,1);
+					anim[bird_index] =creeAnimation(cloud, attitude[bird_index],1);
 				}
 			}
 			rafraichisFenetre();
