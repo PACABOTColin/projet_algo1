@@ -7,8 +7,8 @@
 #include "animation.h" // to use the animation functon
 #include "bouton.h" // to use the button functon
 #include "polynome.h" // to use the polynomial functon
-#include "nuage.h"
-#define NUMBER_OF_SPRIT 3
+#include "nuage.h" // to use the multi dote 
+#define NUMBER_OF_SPRIT 3 // define the numer of sprites how are load at the start of the program
 // Picture default width and height
 #define LargeurFenetre 807
 #define HauteurFenetre 593
@@ -58,35 +58,35 @@ void cercle(float centreX, float centreY, float rayon)
 void gestionEvenement(EvenementGfx evenement)
 {
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
-	static DonneesImageRGB* background[2];
-	static bouton button[NB_BOUTON];
-	static slideBar slideButton[2];
-	static sprite attitude[NUMBER_OF_SPRIT];
-	static animation anim[NUMBER_OF_SPRIT];
-	static nuage cloud;
-	static int animC=0;
+	static DonneesImageRGB* background[2]; // contain the background picture
+	static bouton button[NB_BOUTON]; //contain all the button
+	static slideBar slideButton[2]; //contain the two slidebard
+	static sprite attitude[NUMBER_OF_SPRIT]; //contain the different picture of differents sprite
+	static animation anim[NUMBER_OF_SPRIT]; // contain the animation of diffetents sprite
+	static nuage cloud; // contain the cloud of dote
+	static int animC=0; // contain if the animation is initial
 
 
 	switch(evenement)
 	{
 		case Initialisation:
 
-			// Configure the system for generate a temposrisation message every 20 millisecond
+			// Configure the system to not generate a temposrisation message
 			demandeTemporisation(-1);
 			cloud.nb = 0; //initialyse cloud
-			initialiseBoutons(button);
-			redimensionne(button);
+			initialiseBoutons(button);// initialise button
+			redimensionne(button); // finish the initialisation of button
 			for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
 			{
-				anim[i].type = -1;
+				anim[i].type = -1; // initialy all the animation
 			}
-			background[0] = lisBMPRGB("images/IHM.bmp");
-			background[1] = lisBMPRGB("images/IHM_edit.bmp");
-			attitude[0] = lectureImageAttitude("images/sprites/oiseauRouge%d.bmp", "images/sprites/oiseauRouge%d_reverse.bmp");
-			attitude[1] = lectureImageAttitude("images/sprites/aigle%d_reverse.bmp", "images/sprites/aigle%d.bmp");
-			attitude[2] = lectureImageAttitude("images/sprites/fusee%d.bmp", "images/sprites/fusee%d_reverse.bmp");
+			background[0] = lisBMPRGB("images/IHM.bmp"); //load background 1 picture
+			background[1] = lisBMPRGB("images/IHM_edit.bmp"); //load background 2 picture
+			attitude[0] = lectureImageAttitude("images/sprites/oiseauRouge%d.bmp", "images/sprites/oiseauRouge%d_reverse.bmp"); // load 1 sprite pictures
+			attitude[1] = lectureImageAttitude("images/sprites/aigle%d_reverse.bmp", "images/sprites/aigle%d.bmp"); // load 2 sprite pictures
+			attitude[2] = lectureImageAttitude("images/sprites/fusee%d.bmp", "images/sprites/fusee%d_reverse.bmp"); // load 3 sprite pictures
 			slideButton[0] = slideBarInit(2 * largeurFenetre() / 30, 23 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS);
-			slideButton[1] = slideBarInit(26 * largeurFenetre() / 30, 29 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS);
+			slideButton[1] = slideBarInit(26 * largeurFenetre() / 30, 29 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS); // initialyse the two slidebar
 			break;
 		
 		case Temporisation:
@@ -94,28 +94,28 @@ void gestionEvenement(EvenementGfx evenement)
 			// we update the window
 			for(int i = 0; i < NUMBER_OF_SPRIT; ++i)
 			{
-				anim[i].current_state = slideButton[0].value;
-				anim[i] = lectureAnimation(anim[i], button[4].etat);
+				anim[i].current_state = slideButton[0].value; // update the animation with the value of slidebra
+				anim[i] = lectureAnimation(anim[i], button[4].etat); //update animation state
 				if(animC==1)
 				{
-					slideButton[0].value = anim[i].current_state;
+					slideButton[0].value = anim[i].current_state; //update the slidebar with the new value af the animation
 				}
 			}
-			rafraichisFenetre();
+			rafraichisFenetre(); 
 			break;
 			
 		case Affichage:
 
 			// The background color is white
-			effaceFenetre(255, 255, 255);
-			ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB);
-			afficheBouton(button);
+			effaceFenetre(255, 255, 255); // clear window
+			ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB); // print background
+			afficheBouton(button); // print button
 
-			if(animC==1)
+			if(animC==1) // if the aniamtion is initialised
 			{
 				for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
 				{
-				afficheAnimation(anim[i]);
+					afficheAnimation(anim[i]);// print aniamtion on window
 				}
 			}
 

@@ -8,13 +8,13 @@
 bouton initialiseB(char image1[], char image2[], int etatEnfonce)
 {
 	bouton button;
-	button.image1=lisBMPRGB(image1);
-	if(button.image1 == NULL)
+	button.image1=lisBMPRGB(image1); //load image for the button in state 0
+	if(button.image1 == NULL) // chec if the file can be load
 	{
 		printf("le fichier ne peut être charger : %s\n", image1);
 	}
-	button.image2=lisBMPRGB(image2);
-	if(button.image2 == NULL)
+	button.image2=lisBMPRGB(image2);//load image for the button in state 0
+	if(button.image2 == NULL)// chec if the file can be load
 	{
 		printf("le fichier ne peut être charger: %s\n", image2);
 	}
@@ -26,6 +26,7 @@ bouton initialiseB(char image1[], char image2[], int etatEnfonce)
 
 void initialiseBoutons(bouton button[])
 {
+	// initialise all the button
 	button[0] = initialiseB("images/Boutons/playButton.bmp","images/Boutons/pauseButton.bmp", 1);
 	button[1] = initialiseB("images/Boutons/stopButton.bmp","images/Boutons/stopButton.bmp", 0);
 	button[2] = initialiseB("images/Boutons/resetButton.bmp","images/Boutons/resetButton_Appuis.bmp", 0);
@@ -50,6 +51,7 @@ void initialiseBoutons(bouton button[])
 
 bouton coordonnee (bouton button,int xmin,int ymin,int xmax,int ymax)
 {
+	// for initialise the button position
 	button.xmin= xmin < xmax ? xmin : xmax;
 	button.ymin= ymin < ymax ? ymin : ymax;
 	button.xmax= xmin > xmax ? xmin : xmax;
@@ -88,12 +90,12 @@ void afficheBouton(bouton button[NB_BOUTON])
 	int i;
 	for (i=0;i<NB_BOUTON;i++)
 	{
-		if (button[i].etat==0)
+		if (button[i].etat==0)// print the first picture if the state is 0
 		{
 			//ecrisImage(((button[i].xmax - button[i].xmin) - button[i].image1->largeurImage)/2, ((button[i].ymax - button[i].ymin) - button[i].image1->hauteurImage)/2, button[i].image1->largeurImage,	button[i].image1->hauteurImage, button[i].image1->donneesRGB);
 			ecrisImage(button[i].xmin, button[i].ymin , button[i].image1->largeurImage, button[i].image1->hauteurImage, button[i].image1->donneesRGB);
 		}
-		else
+		else // prins the secon pitur else
 		{
 			//ecrisImage(((button[i].xmax-button[i].xmin) - button[i].image2->largeurImage)/2, ((button[i].ymax - button[i].ymin) - button[i].image2->hauteurImage)/2, button[i].image2->largeurImage, button[i].image2->hauteurImage, button[i].image2->donneesRGB);
 			ecrisImage(button[i].xmin, button[i].ymin , button[i].image2->largeurImage, button[i].image2->hauteurImage, button[i].image2->donneesRGB);
@@ -108,20 +110,20 @@ void bouton_clic(bouton button[])
 		button[i].ancienEtat = button[i].etat;
 		if(etatBoutonSouris() == GaucheAppuye
 			&& abscisseSouris() > button[i].xmin && abscisseSouris() < button[i].xmax 
-			&& ordonneeSouris() > button[i].ymin && ordonneeSouris() < button[i].ymax)
+			&& ordonneeSouris() > button[i].ymin && ordonneeSouris() < button[i].ymax) // if the button is cliked
 		{
-			if(button[i].etatEnfonce == 1)
+			if(button[i].etatEnfonce == 1) // if it's a two-stable button change the state
 			{
 				button[i].etat = !button[i].etat;
 			}
-			else
+			else//else is a push button, put the state to 1
 			{
 				button[i].etat = 1;
 			}
 		}
 		else
 		{
-			if (button[i].etatEnfonce == 0)
+			if (button[i].etatEnfonce == 0) // if the button is not cliked and it's a push button put state to 0
 			{
 				button[i].etat = 0;
 			}
@@ -130,7 +132,7 @@ void bouton_clic(bouton button[])
 }
 
 slideBar slideBarInit(int xmin, int xmax, int y, int valMin, int valMax)
-{
+{ // initialyse a slidebar struct
 	slideBar rv;
 	rv.xmin = xmin;
 	rv.xmax = xmax;
@@ -142,13 +144,14 @@ slideBar slideBarInit(int xmin, int xmax, int y, int valMin, int valMax)
 }
 
 slideBar slideBarSetValue(slideBar slide, int value)
-{
+{ // for change the value printed by the slideBar
 	slide.value = value;
 	return slide;
 }
 
 void printSlideBar(slideBar slide)
 {
+	//print the slidebar
 	couleurCourante(50, 50, 50);
 	epaisseurDeTrait(4);
 	ligne(slide.xmin, slide.y, slide.xmax, slide.y);
@@ -161,7 +164,7 @@ slideBar gereClicSlideBar(slideBar slide)
 {
 	if( etatBoutonSouris() == GaucheAppuye
 		&& ordonneeSouris() > slide.y - 4 && ordonneeSouris() < slide.y + 4
-		&& abscisseSouris() > slide.xmin && abscisseSouris() < slide.xmax)
+		&& abscisseSouris() > slide.xmin && abscisseSouris() < slide.xmax) // if the slidebar is cliked, update value
 	{
 		slide.value = (abscisseSouris() - slide.xmin) * (slide.valMax - slide.valMin) / (slide.xmax - slide.xmin) + slide.valMin;
 	}

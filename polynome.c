@@ -7,6 +7,7 @@
 
 int pgcd(int a, int b)
 {
+	// calculate the PGCD of two number
 	if (a < 0) 
 	{
 		a = -a;
@@ -24,12 +25,14 @@ int pgcd(int a, int b)
 
 quotien simplifiQuotien (quotien a)
 {
-	if(a.den < 0)
+	// simplify the sine
+	if(a.den < 0) 
 	{
 		a.den = abs(a.den);
 		a.num = 0 - a.num;
 	}
-	int d = abs(pgcd(a.num, a.den));
+	// simplyfy the number of quotien
+	int d = pgcd(a.num, a.den);
 	a.num = a.num / d;
 	a.den = a.den / d;
 	return a;
@@ -157,13 +160,13 @@ float evaluePolynome (float x, polynome P)
 
 polynome additionPolynome (polynome a, polynome b)
 {
-	if (a.degre < b.degre)
+	if (a.degre < b.degre) // make the polynoma a the whith the hies degres
 	{
 		polynome c = a;
 		a = b;
 		b = c;
 	}
-	for (int i = 0; i <= b.degre; ++i)
+	for (int i = 0; i <= b.degre; ++i) // addition different quotient of the polinome
 	{
 		a.coef[i] = additionQuotien(a.coef[i], b.coef[i]);
 	}
@@ -173,7 +176,7 @@ polynome additionPolynome (polynome a, polynome b)
 polynome initialise_polynome(int c)
 {
 	polynome rv;
-	for (int i = 0; i < DEGREMAX; ++i)
+	for (int i = 0; i < DEGREMAX; ++i) // initialyse polynome with one constante in 
 	{
 		rv.coef[i].num = c;
 		rv.coef[i].den = 1;
@@ -193,8 +196,8 @@ polynome multipliPolynome(polynome a, polynome b)
 		{
 			polynome tmp = initialise_polynome(0);
 			tmp.degre = u + i;
-			tmp.coef[tmp.degre] = multipliQuotien(a.coef[i], b.coef[u]);
-			rv = additionPolynome(tmp, rv);
+			tmp.coef[tmp.degre] = multipliQuotien(a.coef[i], b.coef[u]); // multiply one term of the first polynome to the other polynome
+			rv = additionPolynome(tmp, rv); // and addition the resuld to the return polynome
 			exprimePolynome(rv, str);
 		}
 	}
@@ -207,12 +210,12 @@ polynome lagrange (nuage cloud)
 	char str[100];
 	polynome rv, tmp, tmp2;
 	rv = initialise_polynome(0);
-	for (int i = 0; i < cloud.nb - 1; ++i)
+	for (int i = 0; i < cloud.nb - 1; ++i) // sum of ly
 	{
 		tmp = initialise_polynome(1);
-		for (int j = 0; j < cloud.nb - 1; ++j)
+		for (int j = 0; j < cloud.nb - 1; ++j) //li
 		{
-			printf("i : %d\tj : %d\n", i, j);
+			printf("i : %d\tj : %d\n", i, j); //product of différent term of li
 			if(i != j)
 			{
 				tmp2 = initialise_polynome(1);
@@ -222,10 +225,10 @@ polynome lagrange (nuage cloud)
 				tmp2.coef[1].den = cloud.x[i] - cloud.x[j];
 				tmp2.coef[1].num = 1;
 				tmp = multipliPolynome(tmp2, tmp);
-				exprimePolynome(tmp2, str);
-				printf("tmp2 : %s\n", str);
-				exprimePolynome(tmp, str);
-				printf("tmp : %s, degre :%d \n", str, tmp.degre);
+				//exprimePolynome(tmp2, str);
+				//printf("tmp2 : %s\n", str);
+				//exprimePolynome(tmp, str);
+				//printf("tmp : %s, degre :%d \n", str, tmp.degre);
 			}
 		}
 		tmp2 = initialise_polynome(0);
@@ -233,8 +236,8 @@ polynome lagrange (nuage cloud)
 		tmp2.coef[0].num = cloud.y[i];
 		tmp = multipliPolynome(tmp2, tmp);
 		rv = additionPolynome(rv, tmp);
-		exprimePolynome(rv, str);
-		printf("--------->rv : %s\n", str);
+		//exprimePolynome(rv, str);
+		//printf("--------->rv : %s\n", str);
 	}
 	return rv;
 }
@@ -243,7 +246,7 @@ animation creeAnimationLigneBrisee(nuage cloud, sprite attitude)
 {
 	animation rv;
 	float lenght = 0;
-	for (int i = 0; i < cloud.nb - 1; ++i)
+	for (int i = 0; i < cloud.nb - 1; ++i) // calculate the x ditance of the curve
 	{
 		lenght += abs(cloud.x[i] - cloud.x[i + 1]);
 	}
@@ -256,23 +259,23 @@ animation creeAnimationLigneBrisee(nuage cloud, sprite attitude)
 	{
 		if(cloud.x[k] < cloud.x[k + 1])
 		{
-			rv.param[i].x = cloud.x[k] + ((i - tmp) * lenght) / NB_INSTANTS;
-			offset = 0;
+			rv.param[i].x = cloud.x[k] + ((i - tmp) * lenght) / NB_INSTANTS; // calculate new x prosition
+			offset = 0; // to use the picture forwarde to right
 		}
 		else
 		{
-			rv.param[i].x = cloud.x[k] - ((i - tmp) * lenght) / NB_INSTANTS;
-			offset = attitude.nb;
+			rv.param[i].x = cloud.x[k] - ((i - tmp) * lenght) / NB_INSTANTS; // calculate new x prosition
+			offset = attitude.nb; // to use the picture forwarde to left
 		}
 		if((rv.param[i].x >= cloud.x[k + 1] && cloud.x[k] < cloud.x[k + 1])
-			|| (rv.param[i].x <= cloud.x[k + 1] && cloud.x[k] > cloud.x[k + 1]))
+			|| (rv.param[i].x <= cloud.x[k + 1] && cloud.x[k] > cloud.x[k + 1])) // update the position in the dote cloud
 		{
 			k ++;
 			tmp = i;
 		}
 		b = (cloud.y[k + 1] - cloud.y[k]) / (cloud.x[k + 1] - cloud.x[k]);
-		rv.param[i].y = b * rv.param[i].x + cloud.y[k] - b * cloud.x[k];
-		rv.param[i].attitude = attitude.attitude[(i%attitude.nb) + offset];
+		rv.param[i].y = b * rv.param[i].x + cloud.y[k] - b * cloud.x[k]; // caculate the y position
+		rv.param[i].attitude = attitude.attitude[(i%attitude.nb) + offset]; // set the picture of sprite
 	}
 	return rv;
 }
