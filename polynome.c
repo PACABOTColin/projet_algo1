@@ -5,22 +5,16 @@
 #include "polynome.h"
 #include "nuage.h"
 
-int pgcd(int a, int b)
+ int pgcd(int a, int b)
 {
-	// calculate the PGCD of two number
-	if (a < 0) 
-	{
-		a = -a;
-	}
-	if (b < 0) 
-	{
-		b = -b;
-	}
-	if (b) 
-	{
-		while ((a %= b) && (b %= a));
-	}
-	return (a + b);
+  int r;
+  while (b != 0)
+    {
+      r = a%b;
+      a = b;
+      b = r;
+    }
+  return a;
 }
 
 quotien simplifiQuotien (quotien a)
@@ -210,12 +204,16 @@ polynome lagrange (nuage cloud)
 	char str[100];
 	polynome rv, tmp, tmp2;
 	rv = initialise_polynome(0);
-	for (int i = 0; i < cloud.nb - 1; ++i) // sum of ly
+	for (int i = 0; i < cloud.nb; ++i) // sum of ly
 	{
 		tmp = initialise_polynome(1);
-		for (int j = 0; j < cloud.nb - 1; ++j) //li
+		tmp.degre = 0;
+		exprimePolynome(tmp, str);
+		//printf("tmp : %s\n", str);
+		for (int j = 0; j < cloud.nb; ++j) //li
 		{
-			printf("i : %d\tj : %d\n", i, j); //product of différent term of li
+			//printf("i : %d\tj : %d\n", i, j); 
+			//product of différent term of li
 			if(i != j)
 			{
 				tmp2 = initialise_polynome(1);
@@ -225,9 +223,7 @@ polynome lagrange (nuage cloud)
 				tmp2.coef[1].den = cloud.x[i] - cloud.x[j];
 				tmp2.coef[1].num = 1;
 				tmp = multipliPolynome(tmp2, tmp);
-				//exprimePolynome(tmp2, str);
-				//printf("tmp2 : %s\n", str);
-				//exprimePolynome(tmp, str);
+				exprimePolynome(tmp2, str);
 				//printf("tmp : %s, degre :%d \n", str, tmp.degre);
 			}
 		}
@@ -240,6 +236,11 @@ polynome lagrange (nuage cloud)
 		//printf("--------->rv : %s\n", str);
 	}
 	return rv;
+}
+
+polynome newton(nuage cloud)
+{
+
 }
 
 animation creeAnimationLigneBrisee(nuage cloud, sprite attitude)

@@ -105,7 +105,6 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case Affichage:
-
 			// The background color is white
 			effaceFenetre(255, 255, 255); // clear window
 			ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB); // print background
@@ -115,7 +114,7 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
 				{
-					afficheAnimation(anim[i]);// print aniamtion on window
+					afficheAnimation(anim[i]); // print aniamtion on window
 				}
 			}
 
@@ -192,7 +191,6 @@ void gestionEvenement(EvenementGfx evenement)
 					demandeTemporisation(-1);
 					break;
 			}
-			//rafraichisFenetre();
 			break;
 			
 		case ClavierSpecial:
@@ -203,7 +201,7 @@ void gestionEvenement(EvenementGfx evenement)
 			bouton_clic(button);
 			slideButton[0] = gereClicSlideBar(slideButton[0]);//update the player slidebar position
 			slideButton[1] = gereClicSlideBar(slideButton[1]);//update the parametric slidebar position
-		if(etatBoutonSouris() == GaucheAppuye)
+			if(etatBoutonSouris() == GaucheAppuye)
 			{
 				int bird_index;
 				if (button[11].etat == 1) 

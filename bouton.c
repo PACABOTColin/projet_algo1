@@ -38,8 +38,8 @@ void initialiseBoutons(bouton button[])
 	button[6] = initialiseB("images/Boutons/Debut_Saisie.bmp","images/Boutons/Fin_Saisie.bmp", 1);
 	
 	button[7] = initialiseB("images/Boutons/affiche_Courbe.bmp","images/Boutons/affiche_Courbe_Appuis.bmp", 1);
-	button[8] = initialiseB("images/Boutons/Lagrange.bmp","images/Boutons/Lagrange_Appuis.bmp", 1);
-	button[9] = initialiseB("images/Boutons/Newton.bmp","images/Boutons/Newton_Appuis.bmp", 1);
+	button[8] = initialiseB("images/Boutons/Newton.bmp","images/Boutons/Newton_Appuis.bmp", 1);
+	button[9] = initialiseB("images/Boutons/Lagrange.bmp","images/Boutons/Lagrange_Appuis.bmp", 1);
 	button[10] = initialiseB("images/Boutons/Ligne_Brisee.bmp","images/Boutons/Ligne_Brisee_Appuis.bmp", 1);
 	button[11] = initialiseB("images/sprites/oiseauRouge1.bmp","images/sprites/oiseauRouge8.bmp", 1);
 	button[12] = initialiseB("images/sprites/oiseauBleuBouton1.bmp","images/sprites/oiseauBleu3.bmp", 1);

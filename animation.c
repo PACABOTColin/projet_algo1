@@ -36,9 +36,33 @@ sprite lectureImageAttitude(char nameFormat[], char nameFormat2[])
 	}
 	for (i = 0; i < rv.nb*2; ++i)
 	{
-		printf("rv.attitude[%d]=0X%X\n", i,rv.attitude[i]);
+		printf("rv.attitude[%d]=%p\n", i,rv.attitude[i]);
 	}
 	printf("nb de sprite charger 2X : %d\n", rv.nb);
+	return rv;
+}
+
+animation creeAnimationlagrange (nuage points, sprite attitude)
+{
+	animation rv;
+	char str[100];
+	rv.type = 2;
+	rv.current_state = 0;
+	for (int i = 0; i < points.nb; ++i)
+	{
+		printf("(%.0f,%.0f)\n", points.x[i], points.y[i]);
+	}
+	polynome poly = lagrange(points);
+	for (int i = 0; i < NB_ATTITUDES; ++i)
+	{
+		rv.param[i].x = (i * (largeurFenetre() - 130)) / NB_ATTITUDES;
+		rv.param[i].y = evaluePolynome(rv.param[i].x, poly);
+		rv.param[i].y = rv.param[i].y < 93 ? 93 : rv.param[i].y;
+		rv.param[i].attitude = attitude.attitude[i % attitude.nb];
+		printf("x:%d\t y:%d img n°:%d ->%p\n", rv.param[i].x, rv.param[i].y, i % attitude.nb, rv.param[i].attitude);
+	}
+	exprimePolynome(poly,str);
+	printf("%s\n", str);
 	return rv;
 }
 
@@ -56,6 +80,10 @@ animation creeAnimation(nuage points, sprite attitude, int mode)
 		case 1 :
 			printf("creeAnimationLigneBrisee\n");
 			anim = creeAnimationLigneBrisee(points, attitude);
+			break;
+		case 2 :
+			printf("creeAnimationlagrange\n");
+			anim = creeAnimationlagrange(points, attitude);
 			break;
 		default : 
 			printf("default\n");

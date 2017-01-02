@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "polynome.h"
 polynome multipliPolynome(polynome a, polynome b);
 polynome additionPolynome (polynome a, polynome b);
@@ -13,7 +14,7 @@ int main(int argc, char const *argv[])
 	for ( i = 0; i < 3; ++i)
 	{
 		a.coef[i].num = i;
-		a.coef[i].den = 1;
+		a.coef[i].den = 100;
 	}
 	a.degre = i-1;
 	for (i = 0; i < 3; ++i)
@@ -35,8 +36,15 @@ int main(int argc, char const *argv[])
 	for (int i = 0; i < cloud.nb; ++i)
 	{
 		cloud.x[i] = i;
-		cloud.y[i] = i * i;
+		cloud.y[i] = i * i + 3 * i + 5;
 	}
+/*	cloud.x[0] = 140;
+	cloud.y[0] = 197;
+	cloud.x[1] = 279;
+	cloud.y[1] = 388;
+	cloud.x[2] = 466;
+	cloud.y[2] = 199;
+*/
 	a = lagrange(cloud);
 	exprimePolynome(a, str);
 	printf("%s\n", str);

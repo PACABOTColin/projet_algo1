@@ -32,7 +32,7 @@ typedef struct sprite
 /*this structure conain all the information for one animation*/
 typedef struct animation
 {
-	instant param[NB_INSTANTS]; 		// contain the parametre of animation
+	instant param[NB_INSTANTS]; 	// contain the parametre of animation
 	int current_state;				// contain the avancement of the animation
 	int type;						//conatain the type of the animation -1 for uninitilizes animation
 									//									 0 for horoisontal animation
