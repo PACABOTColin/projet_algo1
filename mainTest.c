@@ -32,11 +32,11 @@ int main(int argc, char const *argv[])
 	printf("%s\n\n\n\n\n\n\n\n\n\n\n\n\n\n", str);
 
 	nuage cloud;
-	cloud.nb = 3;
+	cloud.nb = 5;
 	for (int i = 0; i < cloud.nb; ++i)
 	{
 		cloud.x[i] = i;
-		cloud.y[i] = i * i + 3 * i + 5;
+		cloud.y[i] = i*i*i*i + 3 * i + 5;
 	}
 /*	cloud.x[0] = 140;
 	cloud.y[0] = 197;

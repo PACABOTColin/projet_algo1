@@ -1,19 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "animation.h"
 #include "polynome.h"
 #include "nuage.h"
 
- int pgcd(int a, int b)
+ double pgcd(double a, double b)
 {
-  int r;
-  while (b != 0)
-    {
-      r = a%b;
-      a = b;
-      b = r;
-    }
+	int r;
+	while (b != 0)
+	{
+		r = fmod(a, b);
+		a = b;
+		b = r;
+	}
   return a;
 }
 
