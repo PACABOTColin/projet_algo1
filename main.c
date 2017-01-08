@@ -15,10 +15,7 @@
 #define LargeurFenetre 800
 #define HauteurFenetre 600
 
-// Circle trace function  
-void cercle(float centreX, float centreY, float rayon);
-
-/* the "gestion des evenements" function is call automaticly by the system when an event arrive */
+//* the "gestion des evenements" function is call automaticly by the system when an event arrive */
 void gestionEvenement(EvenementGfx evenement);
 
 
@@ -34,27 +31,6 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-
-
-/* Circle trace function */
-void cercle(float centreX, float centreY, float rayon)
-{
-	const int Pas = 20; // Number of sectors to trace the circle
-	const double PasAngulaire = 2.*M_PI/Pas;
-	int index;
-	
-	for(index = 0; index < Pas; ++index) // for each sectors
-	{
-		const double angle = 2.*M_PI*index/Pas; // We calculate the starting angle of the sector
-		triangle(centreX, centreY,
-				 centreX+rayon*cos(angle), centreY+rayon*sin(angle),
-				 centreX+rayon*cos(angle+PasAngulaire), centreY+rayon*sin(angle+PasAngulaire));
-			// We trace the sector with the help of triangle
-	}
-	
-}
-
-
 /* The "gestion des evenements" function is called by the system when an events appears */
 
 void gestionEvenement(EvenementGfx evenement)
@@ -62,16 +38,13 @@ void gestionEvenement(EvenementGfx evenement)
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	static DonneesImageRGB* background[2]; // contain the background picture
 	static bouton button[NB_BOUTON]; //contain all the button
-	static slideBar slideButton[2]; //contain the two slidebard
+	static slideBar slideButton[1]; //contain the two slidebard
 	static sprite attitude[NUMBER_OF_SPRIT]; //contain the different picture of differents sprite
 	static animation anim[NUMBER_OF_SPRIT]; // contain the animation of diffetents sprite
 	static nuage cloud; // contain the cloud of dote
 	static int bird_index;
-
+	static DonneesImageRGB *imageInactif1,*imageInactif2,*imageInactif3,*imageInactif4,*imageInactif5,*imageInactif6; //contain the pictures of unavailable buttons
 	static couleur col;
-	col.r=0;
-	col.v=255;
-	col.b=0;
 	
 	static int animC=0; // contain if the animation is initial
 
@@ -79,8 +52,24 @@ void gestionEvenement(EvenementGfx evenement)
 	switch(evenement)
 	{
 		case Initialisation:
-
 			// Configure the system to not generate a temposrisation message
+
+			// Initializes the background color of images for transparency
+			col.r=0; 
+			col.v=255;
+			col.b=0;
+
+			imageInactif1 = lisBMPRGB("images/Boutons/StartInputButton_Indispo.bmp"); // initialize the unavailable picture of "StartInputButton" button
+			if(imageInactif1 == NULL)
+			{
+				printf("error during loading image");
+			}
+			imageInactif2 = lisBMPRGB("images/Boutons/Curves_Display_Indispo.bmp"); // initialize the unavailable picture of "Curves_Display" button
+			imageInactif3 = lisBMPRGB("images/Boutons/NewtonButton_Indispo.bmp"); // initialize the unavailable picture of "NewtonButton" button
+			imageInactif4 = lisBMPRGB("images/Boutons/LagrangeButton_Indispo.bmp"); // initialize the unavailable picture of "LagrangeButton" button
+			imageInactif5 = lisBMPRGB("images/Boutons/BrokenLineButton_Indispo.bmp"); // initialize the unavailable picture of "BrokenLineButton" button
+			imageInactif6 = lisBMPRGB("images/Boutons/LoopButton_Indispo.bmp"); // initialize the unavailable picture of "LoopInputButton" button
+						
 			demandeTemporisation(-1);
 			cloud.nb = 0; //initialyse cloud
 			initialiseBoutons(button);// initialise button
@@ -89,13 +78,13 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				anim[i].type = -1; // initialy all the animation
 			}
+			
 			background[0] = lisBMPRGB("images/HMI_Animation.bmp"); //load background 1 picture
 			background[1] = lisBMPRGB("images/HMI_Editor.bmp"); //load background 2 picture
 			attitude[0] = lectureImageAttitude("images/sprites/oiseauRouge%d.bmp", "images/sprites/oiseauRouge%d_reverse.bmp"); // load 1 sprite pictures
 			attitude[1] = lectureImageAttitude("images/sprites/oiseauBleu%d.bmp", "images/sprites/oiseauBleu%d_reverse.bmp"); // load 2 sprite pictures
 			attitude[2] = lectureImageAttitude("images/sprites/fusee%d.bmp", "images/sprites/fusee%d_reverse.bmp"); // load 3 sprite pictures
-			slideButton[0] = slideBarInit(2 * largeurFenetre() / 30, 23 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS);
-			slideButton[1] = slideBarInit(26 * largeurFenetre() / 30, 29 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS); // initialyse the two slidebar
+			slideButton[0] = slideBarInit(2 * largeurFenetre() / 30, 23 * largeurFenetre() / 30, 4.5 * hauteurFenetre() / 35, 0, NB_INSTANTS); // initialize the slide bar
 			break;
 		
 		case Temporisation:
@@ -127,8 +116,9 @@ void gestionEvenement(EvenementGfx evenement)
 				ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB); // print background
 				afficheBouton(button,7); // print button
 				printSlideBar(slideButton[0]); //Display the player slidebar
-				ecrisImageSansFond(26 *largeurFenetre()/30, hauteurFenetre()/35 , button[6].image1->largeurImage, button[6].image1->hauteurImage, button[6].image1->donneesRGB,col);
-			
+				ecrisImageSansFond(26 *largeurFenetre()/30, hauteurFenetre()/35 , button[6].image1->largeurImage, button[6].image1->hauteurImage, button[6].image1->donneesRGB,col); // display "off" button
+				ecrisImageSansFond(13 *largeurFenetre()/30, hauteurFenetre()/35 , imageInactif6->largeurImage, imageInactif6->hauteurImage, imageInactif6->donneesRGB,col); // display the unavailable picture of "LoopInputButton" button
+					
 			
 			}
 			
@@ -138,9 +128,16 @@ void gestionEvenement(EvenementGfx evenement)
 				effaceFenetre(255, 255, 255); // clear window
 				ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB); // print background
 				afficheBouton(button,NB_BOUTON); // print button
+				if (button[12].etat == 0 && button[13].etat == 0 && button[14].etat == 0) // Condition for display the unavailable button
+				{
+					ecrisImageSansFond(26 *largeurFenetre()/30, hauteurFenetre()/35 , imageInactif1->largeurImage, imageInactif1->hauteurImage, imageInactif1->donneesRGB,col); // display the unavailable picture of "StartInputButton" button
+					ecrisImageSansFond(26 *largeurFenetre()/30, 6*hauteurFenetre()/35 , imageInactif2->largeurImage, imageInactif2->hauteurImage, imageInactif2->donneesRGB,col); // display the unavailable picture of "Curves_DisplayButton" button
+					ecrisImageSansFond(26 *largeurFenetre()/30, 9*hauteurFenetre()/35 , imageInactif3->largeurImage, imageInactif3->hauteurImage, imageInactif3->donneesRGB,col); // display the unavailable picture of "NewtonButton" button 
+					ecrisImageSansFond(26 *largeurFenetre()/30, 12*hauteurFenetre()/35 , imageInactif4->largeurImage, imageInactif4->hauteurImage, imageInactif4->donneesRGB,col); // display the unavailable picture of "LagrangeButton" button 
+					ecrisImageSansFond(26 *largeurFenetre()/30, 15*hauteurFenetre()/35 , imageInactif5->largeurImage, imageInactif5->hauteurImage, imageInactif5->donneesRGB,col); // display the unavailable picture of "BrokenLineButton" button 
+					
+				}
 				printSlideBar(slideButton[0]); //Display the player slidebar
-				printSlideBar(slideButton[1]); //Display the player slidebar
-				
 			}
 			
 			if(animC==1) // if the aniamtion is initialised
@@ -159,17 +156,6 @@ void gestionEvenement(EvenementGfx evenement)
 					slideButton[0].value=anim[i].current_state; //update the slidebar with the new value af the animation
 				}
 			}
-				
-			/*if(button[4].etat == 1 && button[0].etat == 0)
-			{
-				for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
-				{
-					anim[i].current_state=0;
-					afficheAnimation(anim[i]);
-				}
-				printf("reset\n");
-				slideButton[0].value = anim[0].current_state;
-			}*/
 					
 			if(button[7].etat == 1) // "Debut saisie" / "Fin saisie Button"
 			{
@@ -244,9 +230,9 @@ void gestionEvenement(EvenementGfx evenement)
 		case BoutonSouris: // for clicking interaction
 			bouton_clic(button,NB_BOUTON);
 			slideButton[0] = gereClicSlideBar(slideButton[0]);//update the player slidebar position
-			slideButton[1] = gereClicSlideBar(slideButton[1]);//update the parametric slidebar position
 		if(etatBoutonSouris() == GaucheAppuye)
 			{
+				// choice of the character
 				if (button[12].etat == 1) 
 				{
 					bird_index = 0;
@@ -287,7 +273,8 @@ void gestionEvenement(EvenementGfx evenement)
 					slideButton[0].value=0;
 					for (int i = 0; i < NUMBER_OF_SPRIT; ++i) // slidebar position update
 					{
-						anim[i].current_state = slideButton[0].value; 
+						anim[i].current_state = slideButton[0].value;
+						anim[i].type=-1; 
 					}
 					initialiseBoutons(button);
 					redimensionne(button);
@@ -298,7 +285,7 @@ void gestionEvenement(EvenementGfx evenement)
 				{
 					button[2].etat=0;
 				}
-				if(button[5].etat == 0) // if "infinite loop" button is pushed , we can not push the "restart" button
+				if(button[5].etat == 0) // if "edi" button is not pushed , we can not have the access to all of the "editor" mode buttons
 				{
 					
 					button[7].etat=0;
@@ -310,25 +297,21 @@ void gestionEvenement(EvenementGfx evenement)
 					button[13].etat=0;
 					button[14].etat=0;
 					button[15].etat=0;
-					
-					slideButton[1].value=0;
-					
+										
 				}
 
-				if(button[5].etat == 1) // if "infinite loop" button is pushed , we can not push the "restart" button
+				if(button[5].etat == 1) // if "edit" button is pushed , we the "off" button of the bottom disappears
 				{
 					button[6].etat=0;
 				}
 				
-				if (bird_index < 0 )
+				if (bird_index < 0 ) // if user don't have choose a character, he can't choose a trajectory or place any point
 				{
 					button[7].etat=0;
 					button[8].etat=0;
 					button[9].etat=0;
 					button[10].etat=0;
 					button[11].etat=0;
-
-					slideButton[1].value=0;
 				}
 				if(button[7].etat == 1 ) // user can add points only in the drawable area
 				{
@@ -343,18 +326,16 @@ void gestionEvenement(EvenementGfx evenement)
 					{
 						animationType = 2;
 					}
-					else if (button[11].etat == 1) // "Ligne brisee" button
+					else if (button[11].etat == 1) // "BrokenLine" button
 					{
 						animationType = 1;
 					}
-					else // orizontal line
+					else // straight line
 					{
 						animationType = 0;
 					}
-					printf("bird_index : %d\n", bird_index);
 					if (bird_index > -1 && bird_index < NUMBER_OF_SPRIT)
 					{
-						printf("creeAnimation\n");
 						anim[bird_index] = creeAnimation(cloud, attitude[bird_index], animationType);
 					}
 

@@ -10,6 +10,15 @@
  double pgcd(double a, double b)
 {
 	int r;
+	// calculate the PGCD of two number
+	if (a < 0) 
+	{
+		a = -a;
+	}
+	if (b < 0) 
+	{
+		b = -b;
+	}
 	while (b != 0)
 	{
 		r = fmod(a, b);
