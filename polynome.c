@@ -7,24 +7,16 @@
 #include "polynome.h"
 #include "nuage.h"
 
-long double pgcd(long double a, long double b)
+ double pgcd(double a, double b)
 {
-//	 calculate the PGCD of two number
-//	printf("pgcd : %llf ; %f\n", a, b);
-	if (a < 0) 
+	int r;
+	while (b != 0)
 	{
-		a = -a;
+		r = fmod(a, b);
+		a = b;
+		b = r;
 	}
-	if (b < 0) 
-	{
-		b = -b;
-	}
-	if (b)
-	{
-		while ((a = fmodl(a, b)) && (b = fmodl(b, a)));
-	}
-//	printf(" = %llf\n", a+b);
-	return (a + b);
+  return a;
 }
 
 quotien simplifiQuotien (quotien a)
