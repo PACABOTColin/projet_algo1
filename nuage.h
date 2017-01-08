@@ -11,7 +11,7 @@
  * Description: this file contain the function for make animation of sprite
  */
 
-#define DIM 100 // define the number max of dote in cloud
+#define DIM 8 // define the number max of dote in cloud
 
 /* this structure contain the coordinate of the dotes and the how many dote are used*/
 typedef struct nuage

@@ -1,5 +1,5 @@
 #define DEGREMAX 20
-#define LCH 100
+#define LCH 500
 
 #include "nuage.h"
 #include "animation.h"
@@ -7,8 +7,8 @@
 // this structurre contain the numerator and the denominator of one quotien
 typedef struct quotien
 {
-	double num; // contain the numerateur of the fraction
-	double den; // contain the denominateur on the fraction
+	long double num; // contain the numerateur of the fraction
+	long double den; // contain the denominateur on the fraction
 }quotien;
 
 // This structure contain the degre and the coefiten of one polynome 
@@ -33,5 +33,9 @@ polynome lagrange(nuage cloud); // lagrange interpolation
 polynome newton(nuage cloud); 	// newton interpolation
 
 animation creeAnimationLigneBrisee(nuage cloud, sprite attitude); // create trajectory in broken line
+
+animation creeAnimationNewton (nuage points, sprite attitude);
+
+animation creeAnimationLagrange (nuage points, sprite attitude);
 
 void exprimePolynome(polynome P, char expression[LCH]); //print the polynomal expretion in str

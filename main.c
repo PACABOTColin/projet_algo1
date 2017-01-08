@@ -7,11 +7,13 @@
 #include "animation.h" // to use the animation functon
 #include "bouton.h" // to use the button functon
 #include "polynome.h" // to use the polynomial functon
-#include "nuage.h" // to use the multi dote 
+#include "nuage.h" // to use the multi dote
+#include "imageSF.h" // to use the multi dote 
+#include "polygraph.h" //to print polynome on screen
 #define NUMBER_OF_SPRIT 3 // define the numer of sprites how are load at the start of the program
 // Picture default width and height
-#define LargeurFenetre 807
-#define HauteurFenetre 593
+#define LargeurFenetre 800
+#define HauteurFenetre 600
 
 // Circle trace function  
 void cercle(float centreX, float centreY, float rayon);
@@ -25,7 +27,7 @@ int main(int argc, char **argv)
 	initialiseGfx(argc, argv);
 	
 	prepareFenetreGraphique("Animation", LargeurFenetre, HauteurFenetre);
-	
+
 	/* Launch the loop wich directs events on the "gestionEvenement" function bellow, this function use "fonctionAffichage" */
 	lanceBoucleEvenements();
 	
@@ -64,6 +66,13 @@ void gestionEvenement(EvenementGfx evenement)
 	static sprite attitude[NUMBER_OF_SPRIT]; //contain the different picture of differents sprite
 	static animation anim[NUMBER_OF_SPRIT]; // contain the animation of diffetents sprite
 	static nuage cloud; // contain the cloud of dote
+	static int bird_index;
+
+	static couleur col;
+	col.r=0;
+	col.v=255;
+	col.b=0;
+	
 	static int animC=0; // contain if the animation is initial
 
 
@@ -80,8 +89,8 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				anim[i].type = -1; // initialy all the animation
 			}
-			background[0] = lisBMPRGB("images/IHM.bmp"); //load background 1 picture
-			background[1] = lisBMPRGB("images/IHM_edit.bmp"); //load background 2 picture
+			background[0] = lisBMPRGB("images/HMI_Animation.bmp"); //load background 1 picture
+			background[1] = lisBMPRGB("images/HMI_Editor.bmp"); //load background 2 picture
 			attitude[0] = lectureImageAttitude("images/sprites/oiseauRouge%d.bmp", "images/sprites/oiseauRouge%d_reverse.bmp"); // load 1 sprite pictures
 			attitude[1] = lectureImageAttitude("images/sprites/oiseauBleu%d.bmp", "images/sprites/oiseauBleu%d_reverse.bmp"); // load 2 sprite pictures
 			attitude[2] = lectureImageAttitude("images/sprites/fusee%d.bmp", "images/sprites/fusee%d_reverse.bmp"); // load 3 sprite pictures
@@ -108,13 +117,37 @@ void gestionEvenement(EvenementGfx evenement)
 			// The background color is white
 			effaceFenetre(255, 255, 255); // clear window
 			ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB); // print background
-			afficheBouton(button); // print button
+			afficheBouton(button,NB_BOUTON); // print button
 
+
+			if(button[5].etat == 0) // "Debut saisie" / "Fin saisie Button"
+			{
+					
+				effaceFenetre(255, 255, 255); // clear window
+				ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB); // print background
+				afficheBouton(button,7); // print button
+				printSlideBar(slideButton[0]); //Display the player slidebar
+				ecrisImageSansFond(26 *largeurFenetre()/30, hauteurFenetre()/35 , button[6].image1->largeurImage, button[6].image1->hauteurImage, button[6].image1->donneesRGB,col);
+			
+			
+			}
+			
+			else if(button[5].etat == 1) // "Debut saisie" / "Fin saisie Button"
+			{
+			
+				effaceFenetre(255, 255, 255); // clear window
+				ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB); // print background
+				afficheBouton(button,NB_BOUTON); // print button
+				printSlideBar(slideButton[0]); //Display the player slidebar
+				printSlideBar(slideButton[1]); //Display the player slidebar
+				
+			}
+			
 			if(animC==1) // if the aniamtion is initialised
 			{
 				for (int i = 0; i < NUMBER_OF_SPRIT; ++i)
 				{
-					afficheAnimation(anim[i]); // print aniamtion on window
+					afficheAnimation(anim[i]);// print aniamtion on window
 				}
 			}
 
@@ -138,18 +171,29 @@ void gestionEvenement(EvenementGfx evenement)
 				slideButton[0].value = anim[0].current_state;
 			}*/
 					
-			if(button[6].etat == 1) // "Debut saisie" / "Fin saisie Button"
+			if(button[7].etat == 1) // "Debut saisie" / "Fin saisie Button"
 			{
 				dessineNuage(cloud);// user can place points on the drawing area				
 			}
 
-			if(button[7].etat == 1) // "affiche courbe" button
+			if(button[8].etat == 1) // "affiche courbe" button
 			{
-				afficheLigne(cloud); // User can display or hide curves
+				switch (anim[bird_index].type)
+				{
+					case 0:
+						afficheLigne(cloud);
+						break;
+					case 2:
+						afficheCourbePoint(initialiseCourbe(lagrange(cloud)));
+						break;
+					case 3:
+						afficheCourbePoint(initialiseCourbe(newton(cloud)));
+						break;
+					default:
+						break;
+				}
 			}
 					
-			printSlideBar(slideButton[0]); //Display the player slidebar
-			printSlideBar(slideButton[1]); //Display the parametric slidebar
 			break;
 			
 		case Clavier: //For keybord interaction
@@ -198,21 +242,20 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 
 		case BoutonSouris: // for clicking interaction
-			bouton_clic(button);
+			bouton_clic(button,NB_BOUTON);
 			slideButton[0] = gereClicSlideBar(slideButton[0]);//update the player slidebar position
 			slideButton[1] = gereClicSlideBar(slideButton[1]);//update the parametric slidebar position
-			if(etatBoutonSouris() == GaucheAppuye)
+		if(etatBoutonSouris() == GaucheAppuye)
 			{
-				int bird_index;
-				if (button[11].etat == 1) 
+				if (button[12].etat == 1) 
 				{
 					bird_index = 0;
 				}
-				else if (button[12].etat == 1)
+				else if (button[13].etat == 1)
 				{
 					bird_index = 1;
 				}
-				else if (button[13].etat == 1)
+				else if (button[14].etat == 1)
 				{
 					bird_index = 2;
 				}
@@ -221,7 +264,7 @@ void gestionEvenement(EvenementGfx evenement)
 					bird_index = -1;
 				}
 				// if the bird changed reset the cloud
-				for (int i = 11; i <= 13; ++i)
+				for (int i = 12; i <= 14; ++i)
 				{
 					if (button[i].etat != button[i].ancienEtat)
 					{
@@ -258,7 +301,6 @@ void gestionEvenement(EvenementGfx evenement)
 				if(button[5].etat == 0) // if "infinite loop" button is pushed , we can not push the "restart" button
 				{
 					
-					button[6].etat=0;
 					button[7].etat=0;
 					button[8].etat=0;
 					button[9].etat=0;
@@ -266,40 +308,46 @@ void gestionEvenement(EvenementGfx evenement)
 					button[11].etat=0;
 					button[12].etat=0;
 					button[13].etat=0;
+					button[14].etat=0;
+					button[15].etat=0;
 					
-
 					slideButton[1].value=0;
 					
+				}
+
+				if(button[5].etat == 1) // if "infinite loop" button is pushed , we can not push the "restart" button
+				{
+					button[6].etat=0;
 				}
 				
 				if (bird_index < 0 )
 				{
-					button[6].etat=0;
 					button[7].etat=0;
 					button[8].etat=0;
 					button[9].etat=0;
 					button[10].etat=0;
+					button[11].etat=0;
 
 					slideButton[1].value=0;
 				}
-				if(button[6].etat == 1 ) // user can add points only in the drawable area
+				if(button[7].etat == 1 ) // user can add points only in the drawable area
 				{
 					
 					cloud = ajoutPoint(cloud, 0, 93, largeurFenetre() - 130, hauteurFenetre()); // points can not be placed on the button area
 					int animationType;
-					if(button[8].etat == 1) // "Lagrange" button
+					if(button[9].etat == 1) // "Lagrange" button
 					{
 						animationType = 3;
 					}
-					else if(button[9].etat == 1) // "Newton" button
+					else if(button[10].etat == 1) // "Newton" button
 					{
 						animationType = 2;
 					}
-					else if (button[10].etat == 1) // "Ligne brisee" button
+					else if (button[11].etat == 1) // "Ligne brisee" button
 					{
 						animationType = 1;
 					}
-					else 
+					else // orizontal line
 					{
 						animationType = 0;
 					}
@@ -313,44 +361,67 @@ void gestionEvenement(EvenementGfx evenement)
 					
 				}
 				
-				if(button[8].etat == 1 && button[8].ancienEtat == 0) // if "Lagrange" button is pushed user can not pushed "Ligne Brisee" or "Newton" buttons
+				if(button[9].etat == 1 && button[9].ancienEtat == 0) // if "Lagrange" button is pushed user can not pushed "Broken Line" or "Newton" buttons
 				{
+					button[10].etat = 0;
+					button[11].etat = 0;
+					animC=1;
+				}
+				else if(button[10].etat == 1 && button[10].ancienEtat == 0) // if "Newton" button is pushed user can not pushed "Broken Line" or "Lagrange" buttons
+				{
+					button[9].etat = 0; 
+					button[11].etat = 0;
+					animC=1;
+				}
+
+				else if(button[11].etat == 1 && button[11].ancienEtat == 0)// if "Broken Line" button is pushed user can not pushed "Newton" or "Lagrange" buttons
+				{
+					
 					button[9].etat = 0;
 					button[10].etat = 0;
 					animC=1;
 				}
-				else if(button[9].etat ==1 && button[9].ancienEtat ==0) // if "Newton" button is pushed user can not pushed "Ligne Brisee" or "Lagrange" buttons
+
+
+				if(button[12].etat == 1 && button[12].ancienEtat == 0) // if "Bird 1" button is pushed user can not pushed "Bird 2" or "Bird 3" buttons
 				{
-					button[8].etat = 0; 
-					button[10].etat = 0;
+					button[13].etat = 0;
+					button[14].etat = 0;
+					animC=1;
+				}
+				else if(button[13].etat == 1 && button[13].ancienEtat == 0) // if "Bird 2" button is pushed user can not pushed "Bird 1" or "Bird 3" buttons
+				{
+					button[12].etat = 0; 
+					button[14].etat = 0;
 					animC=1;
 				}
 
-				else if(button[10].etat ==1 && button[10].ancienEtat ==0)// if "Ligne Brisee" button is pushed user can not pushed "Newton" or "Lagrange" buttons
+				else if(button[14].etat ==1 && button[14].ancienEtat ==0)// if "Bird 3" button is pushed user can not pushed "Bird 1" or "Bird 2" buttons
 				{
+					
+					button[12].etat = 0;
+					button[13].etat = 0;
 					animC=1;
-					button[8].etat = 0;
-					button[9].etat = 0;
 				}
 
-				if(button[14].etat == 1) // "off" button for close the program
+				if(button[15].etat == 1 || button[6].etat ==1) // "off" buttons for close the program
 				{
 					libereDonneesImageRGB(&background[0]);
 					libereDonneesImageRGB(&background[1]); 
 					termineBoucleEvenements();
 				}
 
-				if(button[3].etat == 1 && button[3].ancienEtat==0 && button[10].etat == 1) // "close path" button pushed (creat the loop)
+				if(button[3].etat == 1 && button[3].ancienEtat == 0 && button[11].etat == 1) // "close path" button pushed (creat the loop)
 				{
 					cloud.x[cloud.nb] = cloud.x[0];
 					cloud.y[cloud.nb] = cloud.y[0];
 					cloud.nb++;
 					anim[bird_index] =creeAnimation(cloud, attitude[bird_index],1);
 				}
-				else if(button[3].etat == 0 && button[3].ancienEtat == 1 && button[10].etat == 1) // "close path" button unpushed (do not dispaly the loop)
+				else if(button[3].etat == 0 && button[3].ancienEtat == 1 && button[11].etat == 1) // "close path" button unpushed (do not dispaly the loop)
 				{
 					cloud.nb--;
-					anim[bird_index] =creeAnimation(cloud, attitude[bird_index],1); // change the sprite animation 
+					anim[bird_index] = creeAnimation(cloud, attitude[bird_index], 1); // change the sprite animation
 				}
 			}
 			rafraichisFenetre();

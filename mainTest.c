@@ -2,15 +2,12 @@
 #include <math.h>
 #include "polynome.h"
 polynome multipliPolynome(polynome a, polynome b);
-polynome additionPolynome (polynome a, polynome b);
-quotien multipliQuotien(quotien a, quotien b);
-int pgcd(int a, int b);
 
 int main(int argc, char const *argv[])
 {
 	int i;
 	polynome a, b;
-	char str[100];
+	char str[LCH];
 	for ( i = 0; i < 3; ++i)
 	{
 		a.coef[i].num = i;
@@ -32,21 +29,19 @@ int main(int argc, char const *argv[])
 	printf("%s\n\n\n\n\n\n\n\n\n\n\n\n\n\n", str);
 
 	nuage cloud;
-	cloud.nb = 3;
-	for (int i = 0; i < cloud.nb; ++i)
+	for (int u = 2; u < 18; ++u)
 	{
-		cloud.x[i] = i;
-		cloud.y[i] = i * i + 3 * i + 5;
+		cloud.nb = u;
+		for (int i = 0; i < cloud.nb; ++i)
+		{
+			cloud.x[i] = i;
+			cloud.y[i] = i * i;
+		}
+		a = lagrange(cloud);
+		exprimePolynome(a, str);
+		printf("%s\n", str);
 	}
-/*	cloud.x[0] = 140;
-	cloud.y[0] = 197;
-	cloud.x[1] = 279;
-	cloud.y[1] = 388;
-	cloud.x[2] = 466;
-	cloud.y[2] = 199;
-*/
-	a = lagrange(cloud);
-	exprimePolynome(a, str);
-	printf("%s\n", str);
+	cloud.nb = 5;
+
 	return 0;
 }

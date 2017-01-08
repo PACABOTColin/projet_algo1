@@ -2,7 +2,8 @@
 #define BOUTON_H
 
 #define LONGEUR_CHAINE_BOUTON 50 // this define contain the size of the string
-#define NB_BOUTON 15 // this define contain the size of the string
+#define NB_BOUTON 16 // this define contain the size of the string
+#define TAILLE NB_BOUTON || NB_BOUTON1
 #define TAILLE_TEXTE 12 // this define contain the size of the string
 
 
@@ -35,8 +36,9 @@ typedef struct slideBar
 	int valMin, valMax; // contain the exterm value how can be contain in value
 }slideBar;
 
-void afficheBouton(bouton button[NB_BOUTON]); // this function display the buton
-void bouton_clic(bouton button[]); // this function make change state for all the button
+
+void afficheBouton(bouton button[],int tailleTableau); // this function display the buton
+void bouton_clic(bouton button[],int tailleTableau); // this function make change state for all the button
 
 bouton initialiseB(char image1[], char image2[], int etatEnfonce);/*this function
 initializes one button*/

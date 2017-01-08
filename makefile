@@ -1,4 +1,4 @@
-all : animation animationTest
+all : animation
 
 animation: animation.o polygraph.o polynome.o bouton.o main.o nuage.o imageSF.o libisentlib.a
 	gcc -Wall animation.o polygraph.o polynome.o bouton.o nuage.o main.o imageSF.o -o animation libisentlib.a -lm -lglut -lGL -lX11

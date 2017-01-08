@@ -25,7 +25,7 @@ typedef struct mode
 }mode;
 
 
-courbe initialiseCourbe(polynome P, float xmin, float xmax, int nbpts); //this function initialize the curve
-void afficheCourbePoint(courbe C, mode M,float x0,float y0); //this function display the point of the curve
+courbe initialiseCourbe(polynome P); //this function initialize the curve
+void afficheCourbePoint(courbe C); //this function display the point of the curve
 
 
