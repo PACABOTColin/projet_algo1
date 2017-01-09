@@ -105,7 +105,6 @@ void gestionEvenement(EvenementGfx evenement)
 		case Affichage:
 			// The background color is white
 			effaceFenetre(255, 255, 255); // clear window
-			ecrisImage(0, 0,background[button[5].etat]->largeurImage,background[button[5].etat]->hauteurImage,background[button[5].etat]->donneesRGB); // print background
 			afficheBouton(button,NB_BOUTON); // print button
 
 

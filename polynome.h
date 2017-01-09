@@ -1,5 +1,5 @@
 #define DEGREMAX 20
-#define LCH 500
+#define LCH 1000
 
 #include "nuage.h"
 #include "animation.h"
